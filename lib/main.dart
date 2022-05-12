@@ -14,12 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        initialRoute: Loginpage.routename,
-        routes: {
-          Loginpage.routename: (context) => const Loginpage(),
-          Homepage.routename:  (context) => const Homepage(),
-          Infopage.routename:  (context) => const Infopage(),
-        },
+      initialRoute: Loginpage.routename,
+      routes: {
+        Loginpage.routename: (context) => const Loginpage(),
+        Homepage.routename: (context) => const Homepage(),
+        Infopage.routename: (context) => const Infopage(),
+      },
     );
   } //build
 }//MyApp
