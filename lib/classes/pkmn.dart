@@ -5,6 +5,7 @@ class Pkmn{
   int weight = -1;
   String sprite = '';
   List<String> type = [];
+  int value = 0;
 
   Pkmn({
     required this.id,
@@ -17,7 +18,6 @@ class Pkmn{
 
   Pkmn.nothing();
 
-  //This factory method is used to create a new Pokemon object from a JSON.
   factory Pkmn.fromJson(Map<String, dynamic> json) {
     return Pkmn(
       id: json['id'],
