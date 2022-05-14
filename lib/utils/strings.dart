@@ -13,4 +13,9 @@ class Strings {
   /// Callback scheme (replace XXX with your callback scheme)
   static const String fitbitCallbackScheme = 'projectgroup12';
 
+  static String? userId;
+
+  static void writeUserId(String? id) => userId = id;
+  
+
 }//Strings
