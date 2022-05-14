@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.project_wearable_technologies">
-    <uses-permission android:name="android.permission.INTERNET" />
+    
+   <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="project_wearable_technologies"
         android:name="${applicationName}"
@@ -31,5 +32,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+    <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" >
+      <intent-filter android:label="flutter_web_auth">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="projectgroup12" />
+      </intent-filter>
+    </activity>
     </application>
 </manifest>
