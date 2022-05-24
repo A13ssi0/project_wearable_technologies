@@ -1,6 +1,8 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -16,7 +18,21 @@ class Homepage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(Homepage.routename),
       ),
-      drawer: const Text('data'),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              child: ListTile(
+                  leading: const Icon(MdiIcons.pokeball),
+                  title: const Text('To Pokemon'),
+                  onTap: () {
+                    Navigator.pushNamed(context, Gamepage.routename);
+                  }),
+            ),
+          ],
+        ),
+      ),
       body: Center(
         child: SizedBox(
           child: _plotSleep(context),
@@ -31,31 +47,29 @@ class Homepage extends StatelessWidget {
         future: fetchSleepDataYesterday(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<SleepPoint> sleepData = extractSleepInfo(
-                context, snapshot.data as List<FitbitSleepData>);
-            List<SleepPoint> cleanedSleepData =
-                cleanSleepData(context, sleepData);
+            List<SleepPoint> sleepData = extractSleepInfo(context, snapshot.data as List<FitbitSleepData>);
+            List<SleepPoint> cleanedSleepData = cleanSleepData(context, sleepData);
             return SfCartesianChart(
-              // Initialize category axis
               primaryXAxis: DateTimeAxis(
                 dateFormat: DateFormat('Hm'),
-                axisLine: const AxisLine( width: 0),
+                axisLine: const AxisLine(width: 0),
                 labelRotation: -90,
                 interval: 0.5,
+                minimum: SleepPoint.timeMin,
+                maximum: SleepPoint.timeMax,
               ),
               primaryYAxis: NumericAxis(
                 isVisible: true,
                 interval: 1,
-                majorGridLines: const MajorGridLines(width: 0.15), 
-              minimum: 0,
-                maximum: 3,
-               axisLabelFormatter: (AxisLabelRenderDetails args) {
-                  late String? text = cleanedSleepData[0].sleepLevels[int.parse(args.text)];
-                  late TextStyle textStyle = args.textStyle;                  
+                majorGridLines: const MajorGridLines(width: 0.15),
+                minimum: 0,
+                maximum: SleepPoint.sleepLevels.length.toDouble() - 1,
+                axisLabelFormatter: (AxisLabelRenderDetails args) {
+                  late String? text = SleepPoint.sleepLevels[int.parse(args.text)];
+                  late TextStyle textStyle = args.textStyle;
                   return ChartAxisLabel(text!, textStyle);
                 },
               ),
-              
               series: <ChartSeries>[
                 StepLineSeries<SleepPoint, DateTime>(
                   dataSource: cleanedSleepData,
@@ -65,7 +79,10 @@ class Homepage extends StatelessWidget {
               ],
             );
           } else {
-            return const CircularProgressIndicator();
+            return const SizedBox(
+              height: 60.0,
+              child: Center(child: CircularProgressIndicator()),
+            );
           }
         });
   }
