@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         Caloriespage.routename: (context) => const Caloriespage(),
         Sleeppage.routename: (context) => const Sleeppage(),
         Steppage.routename: (context) => const Steppage(),
-        Gamepage.routename: (context) => const Gamepage(),
+        Gamepage.routename: (context) => Gamepage(),
       },
     );
   } //build

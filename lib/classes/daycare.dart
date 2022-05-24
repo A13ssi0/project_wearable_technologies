@@ -1,20 +1,28 @@
 import 'package:project_wearable_technologies/classes/pkmn.dart';
 
 class DayCare {
-  List<Pkmn> deposit = [];
-  int money = 0;
+  static List<Pkmn> deposit = [];
+  static int money = 0;
 
-  void sell(Pkmn pkmn){
-      money += pkmn.value;
-      deposit.remove(pkmn);
+  void addPkmn(Pkmn pkmn) {
+    deposit.add(pkmn);
   }
 
-  bool buy(Pkmn pkmn){
-    if (money>=pkmn.value){
+  void sellPkmn(Pkmn pkmn) {
+    money += pkmn.value;
+    deposit.remove(pkmn);
+  }
+
+  static bool isBuyable(Pkmn pkmn) {
+    if (money >= pkmn.value) {
       money -= pkmn.value;
       deposit.add(pkmn);
       return true;
     }
-    return false;    
+    return false;
+  }
+
+  int howManyPkmn() {
+    return deposit.length;
   }
 }
