@@ -34,14 +34,22 @@ class Homepage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: SizedBox(
-          child: _plotSleep(context),
-          height: 300,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Passi'),
+            const SizedBox(
+              height: 50,
+            ),
+            SizedBox(
+              child: _plotSleep(context),
+              height: 300,
+            ),
+          ],
         ),
       ),
     );
   } //build
-
   Widget _plotSleep(BuildContext context) {
     return FutureBuilder(
         future: fetchSleepDataYesterday(context),
