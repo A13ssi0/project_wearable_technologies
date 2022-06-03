@@ -22,7 +22,7 @@ class Gamepage extends StatelessWidget {
           title: const Text('blabal'),
         ),
         body: FutureBuilder(
-            future: _startADayCare(),
+            future: DayCare.deposit.isEmpty ?  _startADayCare() : null,
             builder: (context, snapshot) {
               if (isReady) {
                 return plotDayCare(context, dayCare);
@@ -48,17 +48,29 @@ class Gamepage extends StatelessWidget {
                   const Expanded(
                     child: SizedBox(),
                   ),
+                  Text('Lv.'+pkmn.level.toString()),
                   SizedBox(
-                    height: 25,
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          routeForTypes + pkmn.type[0] + '.png',
-                        ),
-                        pkmn.type.length > 1 ? Image.asset(routeForTypes + pkmn.type[1] + '.png') : const SizedBox.shrink()
-                      ],
-                    ),
-                  ),
+                     height: 3,
+                     width: 100,
+                     //alignment: Alignment.centerRight,
+                      child:
+                    LinearProgressIndicator(
+                      value: pkmn.exp/pkmn.expToLevel,
+                      color: const Color.fromARGB(255, 140, 243, 71),
+                      backgroundColor: const Color.fromARGB(255, 107, 103, 103),
+                     )),
+                  
+                 // SizedBox(
+                   // height: 25,
+                   // child: Row(
+                    //  children: [
+                     //   Image.asset(
+                     //     routeForTypes + pkmn.type[0] + '.png',
+                     //   ),
+                      //  pkmn.type.length > 1 ? Image.asset(routeForTypes + pkmn.type[1] + '.png') : const SizedBox.shrink()
+                     // ],
+                   // ),
+                 // ),
                 ],
               ),
             ),
@@ -85,11 +97,11 @@ class Gamepage extends StatelessWidget {
   }
 
   Future<void> _startADayCare() async {
-    for (int i = 0; i < 3; i++) {
+     for (int i = 0; i < 3; i++) {
       int idx = rng.nextInt(899) + 1;
       Pkmn pkmn = await fetchPkmn(idx) as Pkmn;
       dayCare.addPkmn(pkmn);
-    }
+     }
     isReady = true;
   }
 }

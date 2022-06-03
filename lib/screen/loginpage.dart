@@ -26,7 +26,6 @@ class Loginpage extends StatelessWidget {
                     callbackUrlScheme: Strings.fitbitCallbackScheme);
                 Strings.writeUserId(userId);
                 Navigator.pushNamed(context, Homepage.routename);
-
               },
               child: const Text('Authorize'))),
     );

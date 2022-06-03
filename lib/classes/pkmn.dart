@@ -16,6 +16,8 @@ class Pkmn {
   bool mythical = false;
   bool legendary = false;
   List<Evolution>? evolChain;
+  int exp = 0;
+  int expToLevel = 1;
 
 // _____________________ CONSTRUCTORS ______________________________________________________________
 
