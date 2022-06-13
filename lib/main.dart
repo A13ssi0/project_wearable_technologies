@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/screen/caloriespage.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
+import 'package:project_wearable_technologies/screen/heartpage.dart';
 import 'package:project_wearable_technologies/screen/mealpage.dart';
 import 'package:project_wearable_technologies/screen/loginpage.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         Sleeppage.routename: (context) => const Sleeppage(),
         Steppage.routename: (context) => const Steppage(),
         Gamepage.routename: (context) => Gamepage(),
+        HeartPage.routename: (context) => const HeartPage(),
       },
     );
   } //build

@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
+import 'package:project_wearable_technologies/screen/sleeppage.dart';
+import 'package:project_wearable_technologies/screen/steppage.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import 'NavBar.dart';
+import 'heartpage.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -18,26 +23,58 @@ class Homepage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(Homepage.routename),
       ),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Card(
-              child: ListTile(
-                  leading: const Icon(MdiIcons.pokeball),
-                  title: const Text('To Pokemon'),
-                  onTap: () {
-                    Navigator.pushNamed(context, Gamepage.routename);
-                  }),
-            ),
-          ],
-        ),
-      ),
+      drawer: const NavBar(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Passi'),
+            ElevatedButton(
+              // GestureDetector(
+              //onTap: ()
+              onPressed: () {
+                Navigator.pushNamed(context, HeartPage.routename);
+              },
+              child: const Card(
+                elevation: 10,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  child: Text(
+                    'Heart',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Steppage.routename);
+              },
+              child: const Card(
+                elevation: 10,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  child: Text(
+                    'Steps',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Sleeppage.routename);
+              },
+              child: const Card(
+                elevation: 10,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  child: Text(
+                    'Sleep',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(
               height: 50,
             ),
@@ -50,13 +87,16 @@ class Homepage extends StatelessWidget {
       ),
     );
   } //build
+
   Widget _plotSleep(BuildContext context) {
     return FutureBuilder(
         future: fetchSleepDataYesterday(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<SleepPoint> sleepData = extractSleepInfo(context, snapshot.data as List<FitbitSleepData>);
-            List<SleepPoint> cleanedSleepData = cleanSleepData(context, sleepData);
+            List<SleepPoint> sleepData = extractSleepInfo(
+                context, snapshot.data as List<FitbitSleepData>);
+            List<SleepPoint> cleanedSleepData =
+                cleanSleepData(context, sleepData);
             return SfCartesianChart(
               primaryXAxis: DateTimeAxis(
                 dateFormat: DateFormat('Hm'),
@@ -73,7 +113,8 @@ class Homepage extends StatelessWidget {
                 minimum: 0,
                 maximum: SleepPoint.sleepLevels.length.toDouble() - 1,
                 axisLabelFormatter: (AxisLabelRenderDetails args) {
-                  late String? text = SleepPoint.sleepLevels[int.parse(args.text)];
+                  late String? text =
+                      SleepPoint.sleepLevels[int.parse(args.text)];
                   late TextStyle textStyle = args.textStyle;
                   return ChartAxisLabel(text!, textStyle);
                 },
