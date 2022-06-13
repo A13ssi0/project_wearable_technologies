@@ -17,7 +17,7 @@ class Pkmn {
   bool legendary = false;
   List<Evolution>? evolChain;
   int exp = 0;
-  int expToLevel = 1;
+  List expToLevel = [];
 
 // _____________________ CONSTRUCTORS ______________________________________________________________
 
@@ -31,11 +31,12 @@ class Pkmn {
     required this.legendary,
     required this.mythical,
     required this.evolChain,
+    required this.expToLevel,
   });
 
   Pkmn.nothing();
 
-  factory Pkmn.fromJson(Map<String, dynamic> jsonPkmn, Map<String, dynamic> jsonSpec, Map<String, dynamic> jsonEvol) {
+  factory Pkmn.fromJson(Map<String, dynamic> jsonPkmn, Map<String, dynamic> jsonSpec, Map<String, dynamic> jsonEvol, Map<String, dynamic> jsonLevel) {
     return jsonEvol.isEmpty
         ? Pkmn.nothing()
         : Pkmn(
@@ -47,7 +48,10 @@ class Pkmn {
             growRate: jsonSpec['growth_rate']['name'],
             legendary: jsonSpec['is_legendary'],
             mythical: jsonSpec['is_mythical'],
-            evolChain: _extractChainEvolutions(jsonEvol, jsonPkmn['name']));
+            evolChain: _extractChainEvolutions(jsonEvol, jsonPkmn['name']),
+            expToLevel: jsonLevel['levels'],
+            );
+
   }
 
 // _____________________ PRIVATE METHODS ___________________________________________________________

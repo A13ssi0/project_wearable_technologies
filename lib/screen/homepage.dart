@@ -2,21 +2,33 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:project_wearable_technologies/classes/clockTimer.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'homepage';
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ClockTimer>(context, listen: false).startTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(Homepage.routename),
+        title: const Text('asdf'),
       ),
       drawer: Drawer(
         child: Column(
@@ -37,19 +49,25 @@ class Homepage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Passi'),
+            // aggiornamneto dopo toto tempo -----------------------------------------------------
+            Consumer<ClockTimer>(builder: (context, clock, child) {
+              return Text(clock.toString());
+            }),
             const SizedBox(
               height: 50,
             ),
-            SizedBox(
+             SizedBox(
               child: _plotSleep(context),
+
               height: 300,
             ),
           ],
         ),
       ),
     );
-  } //build
+  }
+
+  //build
   Widget _plotSleep(BuildContext context) {
     return FutureBuilder(
         future: fetchSleepDataYesterday(context),
