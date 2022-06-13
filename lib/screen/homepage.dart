@@ -1,9 +1,6 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:project_wearable_technologies/screen/gamepage.dart';
-import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -21,6 +18,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: const Text(Homepage.routename),
       ),
       drawer: const NavBar(),
@@ -29,20 +27,18 @@ class Homepage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              // GestureDetector(
-              //onTap: ()
               onPressed: () {
                 Navigator.pushNamed(context, HeartPage.routename);
               },
               child: const Card(
                 elevation: 10,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: Text(
+                //child: Padding(
+                  //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  child:  Text(
                     'Heart',
                     style: TextStyle(fontSize: 20),
                   ),
-                ),
+               // ),
               ),
             ),
             ElevatedButton(
@@ -60,21 +56,7 @@ class Homepage extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Sleeppage.routename);
-              },
-              child: const Card(
-                elevation: 10,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: Text(
-                    'Sleep',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
+            
             const SizedBox(
               height: 50,
             ),

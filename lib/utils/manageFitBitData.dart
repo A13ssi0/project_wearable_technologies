@@ -2,6 +2,8 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
 
+
+// MANAGE SLEEP DATA ----------------------------------------------------------------------------------------
 class SleepPoint {
   final DateTime? time;
   static List<String?> sleepLevels = ['deep', 'light', 'rem', 'wake'];
@@ -46,3 +48,6 @@ List<SleepPoint> cleanSleepData(BuildContext context, List<SleepPoint> sleepData
   }
   return sleepData;
 }
+
+// MANAGE HEARTH DATA ----------------------------------------------------------------------------------------
+
