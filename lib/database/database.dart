@@ -1,5 +1,8 @@
 //Imports that are necessary to the code generator of floor
+import 'dart:async';
+
 import 'package:floor/floor.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
 
 //Here, we are importing the entities and the daos of the database
 import 'daos/daycareDao.dart';

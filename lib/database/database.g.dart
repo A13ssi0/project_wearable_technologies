@@ -61,6 +61,10 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
+  DaycareDao? _daycareDaoInstance;
+
+  StepsDao? _stepsDaoInstance;
+
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
@@ -88,5 +92,107 @@ class _$AppDatabase extends AppDatabase {
       },
     );
     return sqfliteDatabaseFactory.openDatabase(path, options: databaseOptions);
+  }
+
+  @override
+  DaycareDao get daycareDao {
+    return _daycareDaoInstance ??= _$DaycareDao(database, changeListener);
+  }
+
+  @override
+  StepsDao get stepsDao {
+    return _stepsDaoInstance ??= _$StepsDao(database, changeListener);
+  }
+}
+
+class _$DaycareDao extends DaycareDao {
+  _$DaycareDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _daycareInsertionAdapter = InsertionAdapter(
+            database,
+            'Daycare',
+            (Daycare item) => <String, Object?>{
+                  'id': item.id,
+                  'expToEvolve': item.expToEvolve,
+                  'entry': item.entry,
+                  'value': item.value,
+                  'level': item.level,
+                  'idEvol': item.idEvol,
+                  'lvEvol': item.lvEvol,
+                  'idUpdate': item.idUpdate
+                }),
+        _daycareDeletionAdapter = DeletionAdapter(
+            database,
+            'Daycare',
+            ['id', 'entry'],
+            (Daycare item) => <String, Object?>{
+                  'id': item.id,
+                  'expToEvolve': item.expToEvolve,
+                  'entry': item.entry,
+                  'value': item.value,
+                  'level': item.level,
+                  'idEvol': item.idEvol,
+                  'lvEvol': item.lvEvol,
+                  'idUpdate': item.idUpdate
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Daycare> _daycareInsertionAdapter;
+
+  final DeletionAdapter<Daycare> _daycareDeletionAdapter;
+
+  @override
+  Future<List<int>?> findAllPkmn() async {
+    await _queryAdapter.queryNoReturn('SELECT id FROM Todo');
+  }
+
+  @override
+  Future<void> addPkmn(Daycare pkmn) async {
+    await _daycareInsertionAdapter.insert(pkmn, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> removePkmn(Daycare pkmn) async {
+    await _daycareDeletionAdapter.delete(pkmn);
+  }
+}
+
+class _$StepsDao extends StepsDao {
+  _$StepsDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _stepsInsertionAdapter = InsertionAdapter(
+            database,
+            'Steps',
+            (Steps item) =>
+                <String, Object?>{'id': item.id, 'steps': item.steps});
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<Steps> _stepsInsertionAdapter;
+
+  @override
+  Future<List<Steps>?> findAllUpdates() async {
+    return _queryAdapter.queryList('SELECT * FROM Steps',
+        mapper: (Map<String, Object?> row) =>
+            Steps(row['id'] as int, row['steps'] as int));
+  }
+
+  @override
+  Future<void> clearSteps() async {
+    await _queryAdapter.queryNoReturn('DELETE * FROM Steps');
+  }
+
+  @override
+  Future<void> insertUpdate(Steps update) async {
+    await _stepsInsertionAdapter.insert(update, OnConflictStrategy.abort);
   }
 }
