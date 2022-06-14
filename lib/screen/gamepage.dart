@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/classes/daycare.dart';
+import 'package:project_wearable_technologies/classes/dayare.dart';
 import 'package:project_wearable_technologies/classes/pkmn.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
@@ -14,12 +15,13 @@ class Gamepage extends StatelessWidget {
   var rng = Random();
   DayCare dayCare = DayCare();
   bool isReady = false;
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('blabal'),
+          title: const Text('count.toString()')
         ),
         body: FutureBuilder(
             future: DayCare.deposit.isEmpty ?  _startADayCare() : null,
@@ -49,13 +51,13 @@ class Gamepage extends StatelessWidget {
                     child: SizedBox(),
                   ),
                   Text('Lv.'+pkmn.level.toString()),
+                  const SizedBox(width: 2,),
                   SizedBox(
                      height: 3,
                      width: 100,
-                     //alignment: Alignment.centerRight,
                       child:
                     LinearProgressIndicator(
-                      value: pkmn.exp/pkmn.expToLevel,
+                      value: pkmn.exp/pkmn.expToLevel[pkmn.level +1]['experience'],
                       color: const Color.fromARGB(255, 140, 243, 71),
                       backgroundColor: const Color.fromARGB(255, 107, 103, 103),
                      )),
@@ -87,10 +89,13 @@ class Gamepage extends StatelessWidget {
       var jsonPkmn = jsonDecode(responsePkmn.body);
       var jsonSpec = jsonDecode(responseSpec.body);
       final urlEvol = jsonSpec['evolution_chain']['url'];
+      final urlLevel = jsonSpec['growth_rate']['url'];
       final responseEvol = await http.get(Uri.parse(urlEvol));
-      if (responseEvol.statusCode == 200) {
+      final responseLevel = await http.get(Uri.parse(urlLevel));
+      if (responseEvol.statusCode == 200 && responseLevel.statusCode == 200) {
         var jsonEvol = jsonDecode(responseEvol.body);
-        return Pkmn.fromJson(jsonPkmn, jsonSpec, jsonEvol['chain']);
+        var jsonLevel = jsonDecode(responseLevel.body);
+        return Pkmn.fromJson(jsonPkmn, jsonSpec, jsonEvol['chain'], jsonLevel);
       }
     }
     return null;

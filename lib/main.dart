@@ -7,6 +7,8 @@ import 'package:project_wearable_technologies/screen/loginpage.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
+import 'package:provider/provider.dart';
+import 'classes/clockTimer.dart';
 
 // prova github desktop
 //prova 2
@@ -15,11 +17,25 @@ void main() {
   runApp(const MyApp());
 } //main
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ClockTimer>(context, listen: false).startTimer();
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider<ClockTimer>(
+      create: (context) => ClockTimer(),
+      child: MaterialApp(
       initialRoute: Loginpage.routename,
       routes: {
         Loginpage.routename: (context) => const Loginpage(),
@@ -31,6 +47,5 @@ class MyApp extends StatelessWidget {
         Gamepage.routename: (context) => Gamepage(),
         HeartPage.routename: (context) => const HeartPage(),
       },
-    );
-  } //build
-}//MyApp
+    ),);
+  } }//MyApp

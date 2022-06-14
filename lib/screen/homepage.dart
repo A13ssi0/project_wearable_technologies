@@ -18,6 +18,7 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         backgroundColor: Colors.green,
         title: const Text(Homepage.routename),
       ),
@@ -26,6 +27,7 @@ class Homepage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, HeartPage.routename);
@@ -60,15 +62,21 @@ class Homepage extends StatelessWidget {
             const SizedBox(
               height: 50,
             ),
-            SizedBox(
+             SizedBox(
               child: _plotSleep(context),
+
               height: 300,
             ),
           ],
         ),
       ),
     );
+
+  
+
+  //build
   } //build
+
 
   Widget _plotSleep(BuildContext context) {
     return FutureBuilder(
