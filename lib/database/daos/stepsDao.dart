@@ -8,7 +8,7 @@ abstract class StepsDao {
 
   //Query #1: SELECT -> this allows to obtain all the entries of the Todo table
   @Query('SELECT * FROM Steps')
-  Future<List<Steps>> findAllUpdates();
+  Future<List<Steps>?> findAllUpdates();
 
   //Query #2: INSERT -> this allows to add a Todo in the table
   @insert

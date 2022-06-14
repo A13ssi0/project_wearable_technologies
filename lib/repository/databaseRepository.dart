@@ -13,7 +13,7 @@ class DatabaseRepository extends ChangeNotifier{
   DatabaseRepository({required this.database});
 
   //This method wraps the findAllTodos() method of the DAO
-  Future<List<int>> findAllPkmn() async{
+  Future<List<int>?> findAllPkmn() async{
     final results = await database.daycareDao.findAllPkmn();
     return results;
   }//findAllTodos
@@ -34,7 +34,7 @@ class DatabaseRepository extends ChangeNotifier{
 
 
 
-  Future<List<Steps>> findAllUpdates() async{
+  Future<List<Steps>?> findAllUpdates() async{
     final results = await database.stepsDao.findAllUpdates();
     return results;
   }

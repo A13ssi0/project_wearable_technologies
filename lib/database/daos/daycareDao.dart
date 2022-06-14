@@ -8,7 +8,7 @@ abstract class DaycareDao {
 
   //Query #1: SELECT -> this allows to obtain all the entries of the Todo table
   @Query('SELECT id FROM Todo')
-  Future<List<int>> findAllPkmn();
+  Future<List<int>?> findAllPkmn();
 
   //Query #2: INSERT -> this allows to add a Todo in the table
   @insert
