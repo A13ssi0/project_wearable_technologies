@@ -26,10 +26,7 @@ class Pkmn {
     required this.name,
     required this.sprite,
     required this.type,
-    required this.captRate,
     required this.growRate,
-    required this.legendary,
-    required this.mythical,
     required this.evolChain,
     required this.expToLevel,
   });
@@ -44,10 +41,7 @@ class Pkmn {
             name: jsonPkmn['name'],
             sprite: jsonPkmn['sprites']['front_default'],
             type: _extractTypes(jsonPkmn),
-            captRate: jsonSpec['capture_rate'],
             growRate: jsonSpec['growth_rate']['name'],
-            legendary: jsonSpec['is_legendary'],
-            mythical: jsonSpec['is_mythical'],
             evolChain: _extractChainEvolutions(jsonEvol, jsonPkmn['name']),
             expToLevel: jsonLevel['levels'],
             );
@@ -88,10 +82,6 @@ class Pkmn {
   }
 
 // _____________________ PUBLIC METHODS ____________________________________________________________
-
-  bool isMithical() => mythical;
-  bool isLegendary() => legendary;
-
   //int calcExpLevel (int actualLevel){
 //growRate == 'fast'
 //? return 1

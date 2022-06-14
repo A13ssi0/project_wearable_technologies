@@ -16,8 +16,20 @@ void main() {
   runApp(const MyApp());
 } //main
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ClockTimer>(context, listen: false).startTimer();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClockTimer>(
@@ -34,5 +46,4 @@ class MyApp extends StatelessWidget {
         Gamepage.routename: (context) => Gamepage(),
       },
     ),);
-  } //build
-}//MyApp
+  } }//MyApp

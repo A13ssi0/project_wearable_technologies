@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/classes/daycare.dart';
+import 'package:project_wearable_technologies/classes/dayare.dart';
 import 'package:project_wearable_technologies/classes/pkmn.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';

@@ -2,27 +2,15 @@ import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:project_wearable_technologies/classes/clockTimer.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class Homepage extends StatefulWidget {
+class Homepage extends StatelessWidget {
   const Homepage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'homepage';
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
-
-class _HomepageState extends State<Homepage> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<ClockTimer>(context, listen: false).startTimer();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +37,6 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // aggiornamneto dopo toto tempo -----------------------------------------------------
-            Consumer<ClockTimer>(builder: (context, clock, child) {
-              return Text(clock.toString());
-            }),
             const SizedBox(
               height: 50,
             ),
