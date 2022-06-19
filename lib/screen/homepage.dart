@@ -1,24 +1,33 @@
-import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
-import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:provider/provider.dart';
 
-import 'NavBar.dart';
+import '../classes/clockTimer.dart';
+import '../utils/NavBar.dart';
+import '../utils/plotSleep.dart';
 import 'heartpage.dart';
 
-class Homepage extends StatelessWidget {
+class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'homepage';
 
   @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ClockTimer>(context, listen: false).startTimer();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: Colors.green,
         title: const Text(Homepage.routename),
       ),
@@ -27,20 +36,17 @@ class Homepage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, HeartPage.routename);
               },
               child: const Card(
                 elevation: 10,
-                //child: Padding(
-                  //padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child:  Text(
-                    'Heart',
-                    style: TextStyle(fontSize: 20),
-                  ),
-               // ),
+                child: Text(
+                  'Heart',
+                  style: TextStyle(fontSize: 20),
+                ),
+                // ),
               ),
             ),
             ElevatedButton(
@@ -58,71 +64,23 @@ class Homepage extends StatelessWidget {
                 ),
               ),
             ),
-            
             const SizedBox(
               height: 50,
             ),
-             SizedBox(
-              child: _plotSleep(context),
-
-              height: 300,
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Card(
+                child: SizedBox(
+                  height: 300,
+                  child: plotSleep(context),
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
 
-  
-
-  //build
-  } //build
-
-
-  Widget _plotSleep(BuildContext context) {
-    return FutureBuilder(
-        future: fetchSleepDataYesterday(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            List<SleepPoint> sleepData = extractSleepInfo(
-                context, snapshot.data as List<FitbitSleepData>);
-            List<SleepPoint> cleanedSleepData =
-                cleanSleepData(context, sleepData);
-            return SfCartesianChart(
-              primaryXAxis: DateTimeAxis(
-                dateFormat: DateFormat('Hm'),
-                axisLine: const AxisLine(width: 0),
-                labelRotation: -90,
-                interval: 0.5,
-                minimum: SleepPoint.timeMin,
-                maximum: SleepPoint.timeMax,
-              ),
-              primaryYAxis: NumericAxis(
-                isVisible: true,
-                interval: 1,
-                majorGridLines: const MajorGridLines(width: 0.15),
-                minimum: 0,
-                maximum: SleepPoint.sleepLevels.length.toDouble() - 1,
-                axisLabelFormatter: (AxisLabelRenderDetails args) {
-                  late String? text =
-                      SleepPoint.sleepLevels[int.parse(args.text)];
-                  late TextStyle textStyle = args.textStyle;
-                  return ChartAxisLabel(text!, textStyle);
-                },
-              ),
-              series: <ChartSeries>[
-                StepLineSeries<SleepPoint, DateTime>(
-                  dataSource: cleanedSleepData,
-                  xValueMapper: (SleepPoint data, _) => data.time,
-                  yValueMapper: (SleepPoint data, _) => data.level,
-                )
-              ],
-            );
-          } else {
-            return const SizedBox(
-              height: 60.0,
-              child: Center(child: CircularProgressIndicator()),
-            );
-          }
-        });
+    //build
   }
 } //Page
