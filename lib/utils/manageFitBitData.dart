@@ -1,7 +1,6 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
 
-
 // MANAGE SLEEP DATA ----------------------------------------------------------------------------------------
 class SleepPoint {
   final DateTime time;
@@ -18,7 +17,7 @@ class TimeSeriesSleep {
   static List<SleepPoint> yesterday = [];
   static List<SleepPoint> week = [];
   static List<SleepPoint> month = [];
-  static List<int> differenceDays = [1,7,30];
+  static List<int> differenceDays = [1, 7, 30];
 }
 
 Future<List<FitbitSleepData>> fetchSleepDataYesterday() async {
@@ -34,6 +33,21 @@ Future<List<FitbitSleepData>> fetchSleepDataYesterday() async {
   SleepPoint.timeMin = data[0].entryDateTime as DateTime;
   SleepPoint.timeMax = data.last.entryDateTime?.add(const Duration(minutes: 10)) as DateTime;
   return data;
+}
+
+Future<List<FitbitActivityTimeseriesData>> fetchStep() async {
+  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager = FitbitActivityTimeseriesDataManager(
+    clientID: Strings.fitbitClientID,
+    clientSecret: Strings.fitbitClientSecret,
+    type: 'steps',
+  );
+  FitbitActivityTimeseriesAPIURL fitbitSleepAPIURL =FitbitActivityTimeseriesAPIURL.dayWithResource(
+    date: DateTime.now().subtract(const Duration(days: 1)),
+    userID: Strings.fitbitClientID,
+    resource: fitbitActivityTimeseriesDataManager.type,
+  );
+  final stepsData = await fitbitActivityTimeseriesDataManager.fetch(fitbitSleepAPIURL) as List<FitbitActivityTimeseriesData>;
+  return stepsData;
 }
 
 Future<List<FitbitSleepData>> fetchSleepDataWeekly() async {
@@ -69,7 +83,9 @@ Future<List<FitbitSleepData>> fetchSleepDataMonthly() async {
 List<SleepPoint> extractSleepInfo(List<FitbitSleepData> sleepData) {
   List<SleepPoint> sleepInfo = [];
   for (int i = 0; i < sleepData.length; i++) {
-    i == 0 || sleepData[i].level != sleepData[i - 1].level ? sleepInfo.add(SleepPoint(sleepData[i].entryDateTime as DateTime, sleepData[i].level as String)) : null;
+    i == 0 || sleepData[i].level != sleepData[i - 1].level
+        ? sleepInfo.add(SleepPoint(sleepData[i].entryDateTime as DateTime, sleepData[i].level as String))
+        : null;
   }
   sleepInfo.add(SleepPoint(SleepPoint.timeMax, sleepData.last.level as String));
   return sleepInfo;
@@ -84,7 +100,7 @@ List<SleepPoint> cleanSleepData(List<SleepPoint> sleepData) {
   }
   List<DateTime> dataTime = sleepData.map((e) => e.time).toList();
   List<DateTime> sortedDataTime = dataTime;
-  sortedDataTime.sort((a,b) => a.compareTo(b));
+  sortedDataTime.sort((a, b) => a.compareTo(b));
   sleepData = sortedDataTime.map((e) => sleepData[dataTime.indexOf(e)]).toList();
   return sleepData;
 }
