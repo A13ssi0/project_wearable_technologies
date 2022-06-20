@@ -3,19 +3,6 @@ import 'package:project_wearable_technologies/utils/strings.dart';
 
 // MANAGE SLEEP DATA ----------------------------------------------------------------------------------------
 class SleepPoint {
-  final DateTime? time;
-  static List<String?> sleepLevels = ['deep', 'light', 'rem', 'wake'];
-  static DateTime? timeMin;
-  static DateTime? timeMax;
-  int? level;
-  SleepPoint(this.time, String? levelString) {
-    level = SleepPoint.sleepLevels.contains(levelString)
-        ? sleepLevels.indexOf(levelString)
-        : null;
-  }
-}
-
-Future<List<FitbitSleepData>> fetchSleepDataYesterday(BuildContext context) async {
   final DateTime time;
   static List<String> sleepLevels = ['deep', 'light', 'rem', 'wake'];
   static DateTime timeMin = DateTime.now();
@@ -30,7 +17,7 @@ class TimeSeriesSleep {
   static List<SleepPoint> yesterday = [];
   static List<SleepPoint> week = [];
   static List<SleepPoint> month = [];
-  static List<int> differenceDays = [1,7,30];
+  static List<int> differenceDays = [1, 7, 30];
 }
 
 Future<List<FitbitSleepData>> fetchSleepDataYesterday() async {
@@ -42,23 +29,6 @@ Future<List<FitbitSleepData>> fetchSleepDataYesterday() async {
     date: DateTime.now(),
     userID: Strings.userId,
   );
-  final data = await fitbitSleepDataManager.fetch(fitbitSleepAPIURL)
-      as List<FitbitSleepData>;
-  return data;
-}
-
-List<SleepPoint> extractSleepInfo(
-    BuildContext context, List<FitbitSleepData> sleepData) {
-  List<SleepPoint> sleepInfo = [];
-  SleepPoint.timeMin = sleepData[0].entryDateTime;
-  SleepPoint.timeMax =
-      sleepData.last.entryDateTime?.add(const Duration(minutes: 10));
-  for (int i = 0; i < sleepData.length; i++) {
-    i == 0 || sleepData[i].level != sleepData[i - 1].level
-        ? sleepInfo
-            .add(SleepPoint(sleepData[i].entryDateTime, sleepData[i].level))
-        : null;
-
   final data = await fitbitSleepDataManager.fetch(fitbitSleepAPIURL) as List<FitbitSleepData>;
   SleepPoint.timeMin = data[0].entryDateTime as DateTime;
   SleepPoint.timeMax = data.last.entryDateTime?.add(const Duration(minutes: 10)) as DateTime;
@@ -98,34 +68,27 @@ Future<List<FitbitSleepData>> fetchSleepDataMonthly() async {
 List<SleepPoint> extractSleepInfo(List<FitbitSleepData> sleepData) {
   List<SleepPoint> sleepInfo = [];
   for (int i = 0; i < sleepData.length; i++) {
-    i == 0 || sleepData[i].level != sleepData[i - 1].level ? sleepInfo.add(SleepPoint(sleepData[i].entryDateTime as DateTime, sleepData[i].level as String)) : null;
+    i == 0 || sleepData[i].level != sleepData[i - 1].level
+        ? sleepInfo.add(SleepPoint(sleepData[i].entryDateTime as DateTime, sleepData[i].level as String))
+        : null;
   }
+
   sleepInfo.add(SleepPoint(SleepPoint.timeMax, sleepData.last.level as String));
   return sleepInfo;
 }
 
-
-List<SleepPoint> cleanSleepData(
-    BuildContext context, List<SleepPoint> sleepData) {
-  for (int i = 0; i < sleepData.length - 1; i++) {
-    if (sleepData[i + 1]
-        .time!
-        .isBefore(sleepData[i].time!.add(const Duration(minutes: 3)))) {
-
 List<SleepPoint> cleanSleepData(List<SleepPoint> sleepData) {
   for (int i = 0; i < sleepData.length - 1; i++) {
     if (sleepData[i + 1].time.isBefore(sleepData[i].time.add(const Duration(minutes: 3)))) {
-
       sleepData.remove(sleepData[i]);
       i--;
     }
   }
   List<DateTime> dataTime = sleepData.map((e) => e.time).toList();
   List<DateTime> sortedDataTime = dataTime;
-  sortedDataTime.sort((a,b) => a.compareTo(b));
+  sortedDataTime.sort((a, b) => a.compareTo(b));
   sleepData = sortedDataTime.map((e) => sleepData[dataTime.indexOf(e)]).toList();
   return sleepData;
-
 }
 
 // MANAGE HEARTH DATA ----------------------------------------------------------------------------------------
@@ -138,8 +101,7 @@ Future<List<FitbitHeartData>> fetchHeartData() async {
     date: DateTime.now(),
     userID: Strings.userId,
   );
-  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl)
-      as List<FitbitHeartData>;
+  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl) as List<FitbitHeartData>;
   print(data);
   return data;
 }
@@ -153,8 +115,7 @@ Future<List<FitbitHeartData>> fetchHeartDataMese() async {
     baseDate: DateTime.now(),
     userID: Strings.userId,
   );
-  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl)
-      as List<FitbitHeartData>;
+  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl) as List<FitbitHeartData>;
   return data;
 }
 
@@ -167,29 +128,22 @@ Future<List<FitbitHeartData>> fetchHeartDataSettimana() async {
     baseDate: DateTime.now(),
     userID: Strings.userId,
   );
-  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl)
-      as List<FitbitHeartData>;
+  final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl) as List<FitbitHeartData>;
   return data;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 Future<List<FitbitActivityTimeseriesData>> fetchStep() async {
-  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager =
-      FitbitActivityTimeseriesDataManager(
+  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager = FitbitActivityTimeseriesDataManager(
     clientID: Strings.fitbitClientID,
     clientSecret: Strings.fitbitClientSecret,
     type: 'steps',
   );
-  FitbitActivityTimeseriesAPIURL fitbitSleepAPIURL =
-      FitbitActivityTimeseriesAPIURL.dayWithResource(
+  FitbitActivityTimeseriesAPIURL fitbitSleepAPIURL = FitbitActivityTimeseriesAPIURL.dayWithResource(
     date: DateTime.now().subtract(const Duration(days: 1)),
     userID: Strings.fitbitClientID,
     resource: fitbitActivityTimeseriesDataManager.type,
   );
-  final stepsData = await fitbitActivityTimeseriesDataManager
-      .fetch(fitbitSleepAPIURL) as List<FitbitActivityTimeseriesData>;
+  final stepsData = await fitbitActivityTimeseriesDataManager.fetch(fitbitSleepAPIURL) as List<FitbitActivityTimeseriesData>;
   return stepsData;
 }
-=======
-}
-
