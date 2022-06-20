@@ -1,11 +1,8 @@
-import 'package:fitbitter/fitbitter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../utils/manageFitBitData.dart';
-import '../utils/strings.dart';
 
 class HeartPage extends StatefulWidget {
   //const HeartPage({Key? key}) : super(key: key);
@@ -62,7 +59,7 @@ class _HeartPageState extends State<HeartPage> {
             (heartdata.isEmpty)
                 ? Container()
                 : Container(
-                    margin: EdgeInsets.fromLTRB(0, 12, 8, 0),
+                    margin: const EdgeInsets.fromLTRB(0, 12, 8, 0),
                     width: 400,
                     height: 400,
                     child: BarChart(
@@ -111,22 +108,22 @@ class _HeartPageState extends State<HeartPage> {
                     ),
                   ),
             Container(
-                margin: EdgeInsets.fromLTRB(12, 12, 0, 0),
+                margin: const EdgeInsets.fromLTRB(12, 12, 0, 0),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
                           child: Container(
-                              child: Text(''),
+                              child: const Text(''),
                               color: Colors.pinkAccent,
-                              padding: EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
                           flex: 1,
                         ),
                         Expanded(
                           child: Container(
-                              child: Text('caloriesFatBurn'),
-                              padding: EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              child: const Text('caloriesFatBurn'),
+                              padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
                           flex: 10,
                         ),
                       ],
@@ -135,15 +132,15 @@ class _HeartPageState extends State<HeartPage> {
                       children: [
                         Expanded(
                           child: Container(
-                              child: Text(''),
+                              child: const Text(''),
                               color: Colors.lightBlueAccent,
-                              padding: EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
                           flex: 1,
                         ),
                         Expanded(
                           child: Container(
-                              child: Text('caloriesPeak'),
-                              padding: EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              child: const Text('caloriesPeak'),
+                              padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
                           flex: 10,
                         ),
                       ],
@@ -152,15 +149,15 @@ class _HeartPageState extends State<HeartPage> {
                       children: [
                         Expanded(
                           child: Container(
-                              child: Text(''),
+                              child: const Text(''),
                               color: Colors.deepOrangeAccent,
-                              padding: EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
                           flex: 1,
                         ),
                         Expanded(
                           child: Container(
-                              child: Text('caloriesCardio'),
-                              padding: EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              child: const Text('caloriesCardio'),
+                              padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
                           flex: 10,
                         ),
                       ],
@@ -171,7 +168,7 @@ class _HeartPageState extends State<HeartPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.cached),
+          child: const Icon(Icons.cached),
           onPressed: () {
             setState(() {
               heartdata = [];
@@ -187,22 +184,22 @@ class _HeartPageState extends State<HeartPage> {
 Widget bottomTitles(double value, TitleMeta meta) {
   List<String> titles = [
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 6)))
+        .format(DateTime.now().subtract(const Duration(days: 6)))
         .substring(0, 2),
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 5)))
+        .format(DateTime.now().subtract(const Duration(days: 5)))
         .substring(0, 2),
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 4)))
+        .format(DateTime.now().subtract(const Duration(days: 4)))
         .substring(0, 2),
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 3)))
+        .format(DateTime.now().subtract(const Duration(days: 3)))
         .substring(0, 2),
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 2)))
+        .format(DateTime.now().subtract(const Duration(days: 2)))
         .substring(0, 2),
     DateFormat('EEEE')
-        .format(DateTime.now().subtract(Duration(days: 1)))
+        .format(DateTime.now().subtract(const Duration(days: 1)))
         .substring(0, 2),
     DateFormat('EEEE').format(DateTime.now()).substring(0, 2)
   ];
