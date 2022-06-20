@@ -25,16 +25,18 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<ClockTimer>(
       create: (context) => ClockTimer(),
       child: MaterialApp(
-      initialRoute: Loginpage.routename,
-      routes: {
-        Loginpage.routename: (context) => const Loginpage(),
-        Homepage.routename: (context) => const Homepage(),
-        Mealpage.routename: (context) => const Mealpage(),
-        Caloriespage.routename: (context) => const Caloriespage(),
-        Sleeppage.routename: (context) => const Sleeppage(),
-        Steppage.routename: (context) => const Steppage(),
-        Gamepage.routename: (context) => Gamepage(),
-        HeartPage.routename: (context) => const HeartPage(),
-      },
-    ),);
-  } }//MyApp
+        initialRoute: Loginpage.routename,
+        routes: {
+          Loginpage.routename: (context) => const Loginpage(),
+          Homepage.routename: (context) => const Homepage(),
+          Mealpage.routename: (context) => const Mealpage(),
+          Caloriespage.routename: (context) => const Caloriespage(),
+          Sleeppage.routename: (context) => const Sleeppage(),
+          Steppage.routename: (context) => const Steppage(),
+          Gamepage.routename: (context) => Gamepage(),
+          HeartPage.routename: (context) => HeartPage(),
+        },
+      ),
+    );
+  }
+}//MyApp
