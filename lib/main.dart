@@ -26,26 +26,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-    Provider.of<ClockTimer>(context, listen: false).startTimer();
-  }
-  
-  @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClockTimer>(
       create: (context) => ClockTimer(),
       child: MaterialApp(
-      initialRoute: Loginpage.routename,
-      routes: {
-        Loginpage.routename: (context) => const Loginpage(),
-        Homepage.routename: (context) => const Homepage(),
-        Mealpage.routename: (context) => const Mealpage(),
-        Caloriespage.routename: (context) => const Caloriespage(),
-        Sleeppage.routename: (context) => const Sleeppage(),
-        Steppage.routename: (context) => const Steppage(),
-        Gamepage.routename: (context) => Gamepage(),
-        HeartPage.routename: (context) => const HeartPage(),
-      },
-    ),);
-  } }//MyApp
+        initialRoute: Loginpage.routename,
+        routes: {
+          Loginpage.routename: (context) => const Loginpage(),
+          Homepage.routename: (context) => const Homepage(),
+          Mealpage.routename: (context) => const Mealpage(),
+          Caloriespage.routename: (context) => const Caloriespage(),
+          Sleeppage.routename: (context) => const Sleeppage(),
+          Steppage.routename: (context) => const Steppage(),
+          Gamepage.routename: (context) => Gamepage(),
+          HeartPage.routename: (context) => const HeartPage(),
+        },
+      ),
+    );
+  }
+}//MyApp
