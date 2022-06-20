@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:project_wearable_technologies/screen/sleeppage.dart';
 
-import 'gamepage.dart';
+import '../screen/gamepage.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -37,14 +38,14 @@ class NavBar extends StatelessWidget {
             leading: const Icon(Icons.bedtime),
             title: const Text('Sleep'),
             // ignore: avoid_returning_null_for_void
-            onTap: () => null,
+            onTap: () => Navigator.pushNamed(context, Sleeppage.routename),
           ),
           ListTile(
               leading: const Icon(MdiIcons.pokeball),
               title: const Text('To Pokemon'),
-              onTap: () {
-                Navigator.pushNamed(context, Gamepage.routename);
-              }),
+              onTap: () =>
+                Navigator.pushNamed(context, Gamepage.routename),
+              ),
           const Divider(),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
