@@ -36,8 +36,11 @@ class Loginpage extends StatelessWidget {
                     clientSecret: Strings.fitbitClientSecret,
                     redirectUri: Strings.fitbitRedirectUri,
                     callbackUrlScheme: Strings.fitbitCallbackScheme);
+
+
                 Strings.writeUserId(userId);
                 //prefs.setString('user', userId!);
+
                 Navigator.pushNamed(context, Homepage.routename);
               },
               child: const Text('Tap to Authorize')),

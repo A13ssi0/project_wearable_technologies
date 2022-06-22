@@ -1,12 +1,13 @@
 import 'package:floor/floor.dart';
 
 @entity
-class Steps {
+class ActivityData {
 
   @PrimaryKey(autoGenerate: false)
   final int id;
 
   final int steps;
-
-  Steps(this.id, this.steps);
+  final int calories;
+  
+  ActivityData(this.id, this.steps, this.calories);
 }

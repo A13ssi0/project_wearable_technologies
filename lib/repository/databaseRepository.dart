@@ -2,7 +2,7 @@ import 'package:project_wearable_technologies/database/database.dart';
 import 'package:flutter/material.dart';
 
 import '../database/entities/daycare.dart';
-import '../database/entities/steps.dart';
+import '../database/entities/activityData.dart';
 
 class DatabaseRepository extends ChangeNotifier{
 
@@ -34,18 +34,18 @@ class DatabaseRepository extends ChangeNotifier{
 
 
 
-  Future<List<Steps>?> findAllUpdates() async{
-    final results = await database.stepsDao.findAllUpdates();
+  Future<List<ActivityData>?> findAllUpdates() async{
+    final results = await database.activityDao.findAllUpdates();
     return results;
   }
 
-  Future<void> insertUpdate(Steps update) async {
-    await database.stepsDao.insertUpdate(update);
+  Future<void> insertUpdate(ActivityData update) async {
+    await database.activityDao.insertUpdate(update);
     notifyListeners();
   }
 
   Future<void> clearSteps() async{
-    await database.stepsDao.clearSteps();
+    await database.activityDao.clearSteps();
     notifyListeners();
   }
   

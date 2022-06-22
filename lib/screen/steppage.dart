@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 
 class Steppage extends StatelessWidget {
   const Steppage({Key? key}) : super(key: key);
@@ -9,7 +8,6 @@ class Steppage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    fetchStep();
     return Scaffold(
       appBar: AppBar(
         title: const Text(Steppage.routename),
@@ -19,5 +17,4 @@ class Steppage extends StatelessWidget {
       ),
     );
   } //build
-
 } //Page
