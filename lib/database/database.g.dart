@@ -63,7 +63,7 @@ class _$AppDatabase extends AppDatabase {
 
   DaycareDao? _daycareDaoInstance;
 
-  StepsDao? _stepsDaoInstance;
+  ActivityDao? _activityDaoInstance;
 
   Future<sqflite.Database> open(String path, List<Migration> migrations,
       [Callback? callback]) async {
@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Daycare` (`id` INTEGER NOT NULL, `expToEvolve` INTEGER NOT NULL, `entry` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `idEvol` INTEGER, `lvEvol` INTEGER, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `Steps` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
+            'CREATE TABLE IF NOT EXISTS `Daycare` (`id` INTEGER NOT NULL, `expToEvolve` INTEGER NOT NULL, `entry` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `idEvol` INTEGER, `lvEvol` INTEGER, `sprite` TEXT NOT NULL, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `ActivityData` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Steps` (`id` INTEGER NOT NULL, `steps` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `ActivityData` (`id` INTEGER NOT NULL, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -100,8 +100,8 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  StepsDao get stepsDao {
-    return _stepsDaoInstance ??= _$StepsDao(database, changeListener);
+  ActivityDao get activityDao {
+    return _activityDaoInstance ??= _$ActivityDao(database, changeListener);
   }
 }
 
@@ -119,6 +119,7 @@ class _$DaycareDao extends DaycareDao {
                   'level': item.level,
                   'idEvol': item.idEvol,
                   'lvEvol': item.lvEvol,
+                  'sprite': item.sprite,
                   'idUpdate': item.idUpdate
                 }),
         _daycareDeletionAdapter = DeletionAdapter(
@@ -133,6 +134,7 @@ class _$DaycareDao extends DaycareDao {
                   'level': item.level,
                   'idEvol': item.idEvol,
                   'lvEvol': item.lvEvol,
+                  'sprite': item.sprite,
                   'idUpdate': item.idUpdate
                 });
 
@@ -162,14 +164,17 @@ class _$DaycareDao extends DaycareDao {
   }
 }
 
-class _$StepsDao extends StepsDao {
-  _$StepsDao(this.database, this.changeListener)
+class _$ActivityDao extends ActivityDao {
+  _$ActivityDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _stepsInsertionAdapter = InsertionAdapter(
+        _activityDataInsertionAdapter = InsertionAdapter(
             database,
-            'Steps',
-            (Steps item) =>
-                <String, Object?>{'id': item.id, 'steps': item.steps});
+            'ActivityData',
+            (ActivityData item) => <String, Object?>{
+                  'id': item.id,
+                  'steps': item.steps,
+                  'calories': item.calories
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -177,22 +182,28 @@ class _$StepsDao extends StepsDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Steps> _stepsInsertionAdapter;
+  final InsertionAdapter<ActivityData> _activityDataInsertionAdapter;
 
   @override
-  Future<List<Steps>?> findAllUpdates() async {
-    return _queryAdapter.queryList('SELECT * FROM Steps',
-        mapper: (Map<String, Object?> row) =>
-            Steps(row['id'] as int, row['steps'] as int));
+  Future<List<ActivityData>?> findAllUpdates() async {
+    return _queryAdapter.queryList('SELECT * FROM ActivityData',
+        mapper: (Map<String, Object?> row) => ActivityData(
+            row['id'] as int, row['steps'] as int, row['calories'] as int));
+  }
+
+  @override
+  Future<int?> countRow() async {
+    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM ActivityData');
   }
 
   @override
   Future<void> clearSteps() async {
-    await _queryAdapter.queryNoReturn('DELETE * FROM Steps');
+    await _queryAdapter.queryNoReturn('DELETE * FROM ActivityData');
   }
 
   @override
-  Future<void> insertUpdate(Steps update) async {
-    await _stepsInsertionAdapter.insert(update, OnConflictStrategy.abort);
+  Future<void> insertUpdate(ActivityData update) async {
+    await _activityDataInsertionAdapter.insert(
+        update, OnConflictStrategy.abort);
   }
 }

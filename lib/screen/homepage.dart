@@ -12,6 +12,7 @@ class Homepage extends StatefulWidget {
 
   static const route = '/';
   static const routename = 'homepage';
+  static var database;
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -21,7 +22,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ClockTimer>(context, listen: false).startTimer();
+    Provider.of<Clock>(context, listen: false).startTimer();
   }
 
   @override
@@ -80,7 +81,13 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  //build
+  }
 
-    //build
+  Future<void> kk() async {
+    await creatingDatabase();
+  }
+
+  Future<void> creatingDatabase() async {
   }
 } //Page

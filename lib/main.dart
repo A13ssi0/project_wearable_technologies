@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ClockTimer>(
-      create: (context) => ClockTimer(),
+    return ChangeNotifierProvider<Clock>(
+      create: (context) => Clock(),
       child: MaterialApp(
         initialRoute: Loginpage.routename,
         routes: {

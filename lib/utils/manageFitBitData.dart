@@ -1,7 +1,7 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
 
-// MANAGE SLEEP DATA ----------------------------------------------------------------------------------------
+// MANAGE SLEEP DATA -------------------------------------------------------------------------------
 class SleepPoint {
   final DateTime time;
   static List<String> sleepLevels = ['deep', 'light', 'rem', 'wake'];
@@ -72,7 +72,6 @@ List<SleepPoint> extractSleepInfo(List<FitbitSleepData> sleepData) {
         ? sleepInfo.add(SleepPoint(sleepData[i].entryDateTime as DateTime, sleepData[i].level as String))
         : null;
   }
-
   sleepInfo.add(SleepPoint(SleepPoint.timeMax, sleepData.last.level as String));
   return sleepInfo;
 }
@@ -91,7 +90,21 @@ List<SleepPoint> cleanSleepData(List<SleepPoint> sleepData) {
   return sleepData;
 }
 
-// MANAGE HEARTH DATA ----------------------------------------------------------------------------------------
+// MANAGE CALORIES ---------------------------------------------------------------------------------
+Future<List<FitbitActivityTimeseriesData>> fetchCaloriesToday() async {
+  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager =
+      FitbitActivityTimeseriesDataManager(clientID: Strings.fitbitClientID, clientSecret: Strings.fitbitClientSecret, type: 'calories');
+  FitbitActivityTimeseriesAPIURL fitbitActivityTimeseriesApiUrl = FitbitActivityTimeseriesAPIURL.dayWithResource(
+    date: DateTime.now(),
+    userID: Strings.userId,
+    resource: fitbitActivityTimeseriesDataManager.type,
+  );
+  final List<FitbitActivityTimeseriesData> data =
+    await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
+  return data;
+}
+
+// MANAGE HEART DATA -------------------------------------------------------------------------------
 Future<List<FitbitHeartData>> fetchHeartData() async {
   FitbitHeartDataManager fitbitHeartDataManager = FitbitHeartDataManager(
     clientID: Strings.fitbitClientID,
@@ -102,7 +115,6 @@ Future<List<FitbitHeartData>> fetchHeartData() async {
     userID: Strings.userId,
   );
   final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl) as List<FitbitHeartData>;
-  print(data);
   return data;
 }
 
@@ -130,20 +142,4 @@ Future<List<FitbitHeartData>> fetchHeartDataSettimana() async {
   );
   final data = await fitbitHeartDataManager.fetch(fitbitHeartApiUrl) as List<FitbitHeartData>;
   return data;
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-Future<List<FitbitActivityTimeseriesData>> fetchStep() async {
-  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager = FitbitActivityTimeseriesDataManager(
-    clientID: Strings.fitbitClientID,
-    clientSecret: Strings.fitbitClientSecret,
-    type: 'steps',
-  );
-  FitbitActivityTimeseriesAPIURL fitbitSleepAPIURL = FitbitActivityTimeseriesAPIURL.dayWithResource(
-    date: DateTime.now().subtract(const Duration(days: 1)),
-    userID: Strings.fitbitClientID,
-    resource: fitbitActivityTimeseriesDataManager.type,
-  );
-  final stepsData = await fitbitActivityTimeseriesDataManager.fetch(fitbitSleepAPIURL) as List<FitbitActivityTimeseriesData>;
-  return stepsData;
 }
