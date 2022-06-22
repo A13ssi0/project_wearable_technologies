@@ -22,7 +22,10 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+
     Provider.of<Clock>(context, listen: false).startTimer();
+    //inizializzare money
+
   }
 
   @override
@@ -34,50 +37,75 @@ class _HomepageState extends State<Homepage> {
       ),
       drawer: const NavBar(),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, HeartPage.routename);
-              },
-              child: const Card(
-                elevation: 10,
-                child: Text(
-                  'Heart',
-                  style: TextStyle(fontSize: 20),
-                ),
-                // ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Steppage.routename);
-              },
-              child: const Card(
-                elevation: 10,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                  child: Text(
-                    'Steps',
-                    style: TextStyle(fontSize: 20),
+        child: ListView(
+          children: [Column(
+
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrangeAccent,
+          ),
+
+                onPressed: () {
+                  Navigator.pushNamed(context, HeartPage.routename);
+                },
+                child: Container(
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text(
+                        'Heart',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Icon(
+                        Icons.favorite,
+                        size: 18,
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Card(
-                child: SizedBox(
-                  height: 300,
-                  child: plotSleep(context),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Steppage.routename);
+                },
+                child: const Card(
+                  elevation: 10,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    child: Text(
+                      'Steps',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Card(
+                  child: SizedBox(
+                    height: 300,
+                    child: plotSleep(context),
+                  ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10),
+                child: Card(
+                  child: SizedBox(
+                    height: 300,
+                    //child: plotHearth(BuildContext context, List heartdata),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ]
         ),
       ),
     );
@@ -91,3 +119,4 @@ class _HomepageState extends State<Homepage> {
   Future<void> creatingDatabase() async {
   }
 } //Page
+
