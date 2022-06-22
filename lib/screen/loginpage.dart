@@ -37,8 +37,7 @@ class Loginpage extends StatelessWidget {
                     redirectUri: Strings.fitbitRedirectUri,
                     callbackUrlScheme: Strings.fitbitCallbackScheme);
 
-
-                Strings.writeUserId(userId);
+                Strings.writeUserId(userId!);
                 //prefs.setString('user', userId!);
 
                 Navigator.pushNamed(context, Homepage.routename);

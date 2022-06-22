@@ -2,10 +2,10 @@
 class Strings {
 
   // Fitbit Client ID (replace XXX with your client ID)
-  static const String fitbitClientID = '238KZ8';
+  static const String fitbitClientID = '238CKZ';
 
   // Fitbit Client Secret (replace XXX with your client secret)
-  static const String fitbitClientSecret = '7c95c7568d9af431d1dc9a695644a60e';
+  static const String fitbitClientSecret = '76f6d20766dd508f7645c7dca8a5fce9';
 
   /// Auth Uri (replace XXX with your Uri)
   static const String fitbitRedirectUri = 'projectgroup12://fitbit/auth';

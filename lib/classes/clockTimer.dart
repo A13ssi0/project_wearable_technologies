@@ -1,37 +1,31 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/database/database.dart';
-import 'package:project_wearable_technologies/database/entities/activityData.dart';
-import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 
-class Clock extends ChangeNotifier {
-  static var database;
+import 'package:flutter/cupertino.dart';
+import 'package:project_wearable_technologies/repository/databaseRepository.dart';
+import 'package:provider/provider.dart';
 
-  Future<void> startTimer() async {
-    Clock.database = await $FloorAppDatabase.databaseBuilder('database.dart').build();
+import '../database/entities/activityData.dart';
+import '../utils/manageFitBitData.dart';
+
+class Clock {
+  void startTimer(BuildContext context) {
     Timer.periodic(
-      const Duration(seconds: 10),
-      (Timer t) async {
-        await updateDatabase();
-        notifyListeners();
+      const Duration(minutes: 10),
+      (Timer t) {
+        updateDatabase(context);
       },
     );
   }
 
-  Future<void> updateDatabase() async {
-    AppDatabase db = Clock.database;
+  Future<void> updateDatabase(BuildContext context) async {
     var dataCalories = await fetchCaloriesToday();
     int calories = dataCalories[0].value!.toInt();
-    int? howManyRows = await db.activityDao.countRow();
-    howManyRows ??= 0;
-    ActivityData update = ActivityData(howManyRows, 0, calories);
-    await db.activityDao.insertUpdate(update);
+    ActivityData update = ActivityData(null, 0, calories);
+    await Provider.of<DatabaseRepository>(context, listen: false).insertUpdate(update);
   }
-
-  
 }
 
-
+//@Insert (onConflict = OnConflictStrategy.REPLACE)
 //final personDao = database.personDao;
 //final person = Person(1, 'Frank');
 //await personDao.insertPerson(person);

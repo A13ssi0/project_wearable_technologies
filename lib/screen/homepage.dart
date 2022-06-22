@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
-import 'package:provider/provider.dart';
 
 import '../classes/clockTimer.dart';
 import '../utils/NavBar.dart';
@@ -23,9 +22,8 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
 
-    Provider.of<Clock>(context, listen: false).startTimer();
+    Clock().startTimer(context);
     //inizializzare money
-
   }
 
   @override
@@ -37,20 +35,18 @@ class _HomepageState extends State<Homepage> {
       ),
       drawer: const NavBar(),
       body: Center(
-        child: ListView(
-          children: [Column(
-
+        child: ListView(children: [
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.deepOrangeAccent,
-          ),
-
+                  primary: Colors.deepOrangeAccent,
+                ),
                 onPressed: () {
                   Navigator.pushNamed(context, HeartPage.routename);
                 },
-                child: Container(
+                child: SizedBox(
                   width: 100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -105,18 +101,10 @@ class _HomepageState extends State<Homepage> {
               ),
             ],
           ),
-        ]
-        ),
+        ]),
       ),
     );
-  //build
-  }
-
-  Future<void> kk() async {
-    await creatingDatabase();
-  }
-
-  Future<void> creatingDatabase() async {
+    //build
   }
 } //Page
 
