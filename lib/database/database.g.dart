@@ -192,13 +192,13 @@ class _$ActivityDao extends ActivityDao {
   }
 
   @override
-  Future<int?> countRow() async {
-    await _queryAdapter.queryNoReturn('SELECT COUNT(*) FROM ActivityData');
+  Future<void> clearActivity() async {
+    await _queryAdapter.queryNoReturn('DELETE * FROM ActivityData');
   }
 
   @override
-  Future<void> clearSteps() async {
-    await _queryAdapter.queryNoReturn('DELETE * FROM ActivityData');
+  Future<int?> countRow() async {
+    await _queryAdapter.queryNoReturn('SELECT MAX(id) FROM ActivityData');
   }
 
   @override
