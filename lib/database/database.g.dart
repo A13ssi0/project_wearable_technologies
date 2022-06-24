@@ -61,7 +61,7 @@ class _$AppDatabase extends AppDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  DaycareDao? _daycareDaoInstance;
+  PkmnDao? _pkmnDaoInstance;
 
   ActivityDao? _activityDaoInstance;
 
@@ -84,9 +84,9 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Daycare` (`id` INTEGER NOT NULL, `expToEvolve` INTEGER NOT NULL, `entry` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `idEvol` INTEGER, `lvEvol` INTEGER, `sprite` TEXT NOT NULL, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `ActivityData` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
+            'CREATE TABLE IF NOT EXISTS `PkmnDb` (`id` INTEGER NOT NULL, `expToLevelUp` INTEGER NOT NULL, `entry` INTEGER NOT NULL, `exp` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `idEvol` INTEGER, `lvEvol` INTEGER, `sprite` TEXT NOT NULL, `name` TEXT NOT NULL, `isShop` INTEGER NOT NULL, `type1` TEXT NOT NULL, `type2` TEXT NOT NULL, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `ActivityData` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `ActivityData` (`id` INTEGER NOT NULL, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `ActivityData` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, `day` INTEGER NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -95,8 +95,8 @@ class _$AppDatabase extends AppDatabase {
   }
 
   @override
-  DaycareDao get daycareDao {
-    return _daycareDaoInstance ??= _$DaycareDao(database, changeListener);
+  PkmnDao get pkmnDao {
+    return _pkmnDaoInstance ??= _$PkmnDao(database, changeListener);
   }
 
   @override
@@ -105,36 +105,46 @@ class _$AppDatabase extends AppDatabase {
   }
 }
 
-class _$DaycareDao extends DaycareDao {
-  _$DaycareDao(this.database, this.changeListener)
+class _$PkmnDao extends PkmnDao {
+  _$PkmnDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
-        _daycareInsertionAdapter = InsertionAdapter(
+        _pkmnDbInsertionAdapter = InsertionAdapter(
             database,
-            'Daycare',
-            (Daycare item) => <String, Object?>{
+            'PkmnDb',
+            (PkmnDb item) => <String, Object?>{
                   'id': item.id,
-                  'expToEvolve': item.expToEvolve,
+                  'expToLevelUp': item.expToLevelUp,
                   'entry': item.entry,
+                  'exp': item.exp,
                   'value': item.value,
                   'level': item.level,
                   'idEvol': item.idEvol,
                   'lvEvol': item.lvEvol,
                   'sprite': item.sprite,
+                  'name': item.name,
+                  'isShop': item.isShop ? 1 : 0,
+                  'type1': item.type1,
+                  'type2': item.type2,
                   'idUpdate': item.idUpdate
                 }),
-        _daycareDeletionAdapter = DeletionAdapter(
+        _pkmnDbDeletionAdapter = DeletionAdapter(
             database,
-            'Daycare',
+            'PkmnDb',
             ['id', 'entry'],
-            (Daycare item) => <String, Object?>{
+            (PkmnDb item) => <String, Object?>{
                   'id': item.id,
-                  'expToEvolve': item.expToEvolve,
+                  'expToLevelUp': item.expToLevelUp,
                   'entry': item.entry,
+                  'exp': item.exp,
                   'value': item.value,
                   'level': item.level,
                   'idEvol': item.idEvol,
                   'lvEvol': item.lvEvol,
                   'sprite': item.sprite,
+                  'name': item.name,
+                  'isShop': item.isShop ? 1 : 0,
+                  'type1': item.type1,
+                  'type2': item.type2,
                   'idUpdate': item.idUpdate
                 });
 
@@ -144,23 +154,86 @@ class _$DaycareDao extends DaycareDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Daycare> _daycareInsertionAdapter;
+  final InsertionAdapter<PkmnDb> _pkmnDbInsertionAdapter;
 
-  final DeletionAdapter<Daycare> _daycareDeletionAdapter;
+  final DeletionAdapter<PkmnDb> _pkmnDbDeletionAdapter;
 
   @override
-  Future<List<int>?> findAllPkmn() async {
-    await _queryAdapter.queryNoReturn('SELECT id FROM Todo');
+  Future<List<PkmnDb>?> findAllPkmn() async {
+    return _queryAdapter.queryList('SELECT * FROM PkmnDb',
+        mapper: (Map<String, Object?> row) => PkmnDb(
+            id: row['id'] as int,
+            entry: row['entry'] as int,
+            idEvol: row['idEvol'] as int?,
+            lvEvol: row['lvEvol'] as int?,
+            idUpdate: row['idUpdate'] as int,
+            expToLevelUp: row['expToLevelUp'] as int,
+            sprite: row['sprite'] as String,
+            name: row['name'] as String,
+            value: row['value'] as int,
+            exp: row['exp'] as int,
+            isShop: (row['isShop'] as int) != 0,
+            type1: row['type1'] as String,
+            type2: row['type2'] as String));
   }
 
   @override
-  Future<void> addPkmn(Daycare pkmn) async {
-    await _daycareInsertionAdapter.insert(pkmn, OnConflictStrategy.abort);
+  Future<List<PkmnDb>?> findPkmnShop() async {
+    return _queryAdapter.queryList('SELECT * FROM PkmnDb WHERE isShop = True',
+        mapper: (Map<String, Object?> row) => PkmnDb(
+            id: row['id'] as int,
+            entry: row['entry'] as int,
+            idEvol: row['idEvol'] as int?,
+            lvEvol: row['lvEvol'] as int?,
+            idUpdate: row['idUpdate'] as int,
+            expToLevelUp: row['expToLevelUp'] as int,
+            sprite: row['sprite'] as String,
+            name: row['name'] as String,
+            value: row['value'] as int,
+            exp: row['exp'] as int,
+            isShop: (row['isShop'] as int) != 0,
+            type1: row['type1'] as String,
+            type2: row['type2'] as String));
   }
 
   @override
-  Future<void> removePkmn(Daycare pkmn) async {
-    await _daycareDeletionAdapter.delete(pkmn);
+  Future<List<PkmnDb>?> findPkmnDayCare() async {
+    return _queryAdapter.queryList('SELECT * FROM PkmnDb WHERE isShop = False',
+        mapper: (Map<String, Object?> row) => PkmnDb(
+            id: row['id'] as int,
+            entry: row['entry'] as int,
+            idEvol: row['idEvol'] as int?,
+            lvEvol: row['lvEvol'] as int?,
+            idUpdate: row['idUpdate'] as int,
+            expToLevelUp: row['expToLevelUp'] as int,
+            sprite: row['sprite'] as String,
+            name: row['name'] as String,
+            value: row['value'] as int,
+            exp: row['exp'] as int,
+            isShop: (row['isShop'] as int) != 0,
+            type1: row['type1'] as String,
+            type2: row['type2'] as String));
+  }
+
+  @override
+  Future<List<int>?> findIdPkmnShop() async {
+    await _queryAdapter
+        .queryNoReturn('SELECT id FROM PkmnDb WHERE isShop = True');
+  }
+
+  @override
+  Future<void> removeAllPkmn() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM PkmnDb');
+  }
+
+  @override
+  Future<void> addPkmn(PkmnDb pkmn) async {
+    await _pkmnDbInsertionAdapter.insert(pkmn, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> removePkmn(PkmnDb pkmn) async {
+    await _pkmnDbDeletionAdapter.delete(pkmn);
   }
 }
 
@@ -173,7 +246,10 @@ class _$ActivityDao extends ActivityDao {
             (ActivityData item) => <String, Object?>{
                   'id': item.id,
                   'steps': item.steps,
-                  'calories': item.calories
+                  'calories': item.calories,
+                  'day': item.day,
+                  'month': item.month,
+                  'year': item.year
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -188,22 +264,27 @@ class _$ActivityDao extends ActivityDao {
   Future<List<ActivityData>?> findAllUpdates() async {
     return _queryAdapter.queryList('SELECT * FROM ActivityData',
         mapper: (Map<String, Object?> row) => ActivityData(
-            row['id'] as int, row['steps'] as int, row['calories'] as int));
+            row['id'] as int?,
+            row['steps'] as int,
+            row['calories'] as int,
+            row['day'] as int,
+            row['month'] as int,
+            row['year'] as int));
   }
 
   @override
-  Future<void> clearActivity() async {
-    await _queryAdapter.queryNoReturn('DELETE * FROM ActivityData');
-  }
-
-  @override
-  Future<int?> countRow() async {
+  Future<int?> idxLastUpdate() async {
     await _queryAdapter.queryNoReturn('SELECT MAX(id) FROM ActivityData');
   }
 
   @override
-  Future<void> insertUpdate(ActivityData update) async {
-    await _activityDataInsertionAdapter.insert(
+  Future<void> clearActivity() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM ActivityData');
+  }
+
+  @override
+  Future<int> insertUpdate(ActivityData update) {
+    return _activityDataInsertionAdapter.insertAndReturnId(
         update, OnConflictStrategy.abort);
   }
 }

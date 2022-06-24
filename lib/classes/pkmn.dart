@@ -5,19 +5,16 @@ class Evolution {
 }
 
 class Pkmn {
-  int? id;
-  String name = '';
-  String sprite = '';
-  List<String> type = [];
-  int value = 0;
-  int level = 1;
-  int? captRate;
-  String? growRate;
-  bool mythical = false;
-  bool legendary = false;
-  List<Evolution>? evolChain;
-  int exp = 0;
-  List expToLevel = [];
+  final int id;
+  final String name;
+  final String sprite;
+  final List<String> type;
+  final int value = 0;
+  final int level = 1;
+  final String growRate;
+  final List<Evolution> evolChain;
+  final int exp = 0;
+  final List expToLevel;
 
 // _____________________ CONSTRUCTORS ______________________________________________________________
 
@@ -30,12 +27,17 @@ class Pkmn {
     required this.evolChain,
     required this.expToLevel,
   });
-
-  Pkmn.nothing();
-
   factory Pkmn.fromJson(Map<String, dynamic> jsonPkmn, Map<String, dynamic> jsonSpec, Map<String, dynamic> jsonEvol, Map<String, dynamic> jsonLevel) {
     return jsonEvol.isEmpty
-        ? Pkmn.nothing()
+        ? Pkmn(
+            id: 0,
+            name: '',
+            sprite: '',
+            type: [],
+            growRate: '',
+            evolChain: [],
+            expToLevel: [],
+          )
         : Pkmn(
             id: jsonPkmn['id'],
             name: jsonPkmn['name'],
@@ -44,8 +46,7 @@ class Pkmn {
             growRate: jsonSpec['growth_rate']['name'],
             evolChain: _extractChainEvolutions(jsonEvol, jsonPkmn['name']),
             expToLevel: jsonLevel['levels'],
-            );
-
+          );
   }
 
 // _____________________ PRIVATE METHODS ___________________________________________________________
