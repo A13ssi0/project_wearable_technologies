@@ -1,10 +1,15 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/classes/dayare.dart';
-import 'package:project_wearable_technologies/classes/pkmn.dart';
+//import 'package:project_wearable_technologies/classes/pkmn.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
+
+import 'package:project_wearable_technologies/database/entities/pkmnDb.dart';
+import 'package:provider/provider.dart';
+
+import '../classes/pkmn.dart';
+import '../repository/databaseRepository.dart';
+import '../utils/pkmnShop.dart';
 
 class Gamepage extends StatelessWidget {
   Gamepage({Key? key}) : super(key: key);
@@ -13,33 +18,46 @@ class Gamepage extends StatelessWidget {
   static const routename = 'game';
   static const routeForTypes = 'assets/types/';
   var rng = Random();
-  DayCare dayCare = DayCare();
-  bool isReady = false;
-  
-  
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('count.toString()')
-        ),
-        body: FutureBuilder(
-            future: DayCare.deposit.isEmpty ?  _startADayCare() : null,
-            builder: (context, snapshot) {
-              if (isReady) {
-                return plotDayCare(context, dayCare);
-              } else {
-                return const CircularProgressIndicator();
-              }
-            }));
+    return Consumer<DatabaseRepository>(
+      builder: (context, db, child) {
+        return Scaffold(
+          appBar: AppBar(title: const Text('count.toString()')),
+          body: Column(
+            children: [
+              FutureBuilder(
+                  future: catchPkmnDayCare(context, db),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      List<PkmnDb> dayCare = snapshot.data as List<PkmnDb>;
+                      return plotDayCare(context, dayCare);
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
+              ElevatedButton(onPressed: () => db.removeAllPkmn(), child: const Text('delete'))
+            ],
+          ),
+          floatingActionButton: FloatingActionButton(onPressed: () => openShop(context)),
+        );
+      },
+    );
   }
 
-  Widget plotDayCare(BuildContext context, DayCare dayCare) {
+  Future<List<PkmnDb>?> catchPkmnDayCare(BuildContext context, DatabaseRepository db) async {
+    List<PkmnDb>? list = await db.findPkmnDayCare();
+    list ??= [];
+    return list;
+  }
+
+  Widget plotDayCare(BuildContext context, List<PkmnDb> dayCare) {
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: dayCare.howManyPkmn(),
+        itemCount: dayCare.length,
         itemBuilder: (context, idx) {
-          Pkmn pkmn = DayCare.deposit[idx];
+          PkmnDb pkmn = dayCare[idx];
           return Card(
             elevation: 5,
             child: ListTile(
@@ -50,29 +68,18 @@ class Gamepage extends StatelessWidget {
                   const Expanded(
                     child: SizedBox(),
                   ),
-                  Text('Lv.'+pkmn.level.toString()),
-                  const SizedBox(width: 2,),
+                  Text('Lv.' + pkmn.level.toString()),
+                  const SizedBox(
+                    width: 2,
+                  ),
                   SizedBox(
-                     height: 3,
-                     width: 100,
-                      child:
-                    LinearProgressIndicator(
-                      value: pkmn.exp/pkmn.expToLevel[pkmn.level +1]['experience'],
-                      color: const Color.fromARGB(255, 140, 243, 71),
-                      backgroundColor: const Color.fromARGB(255, 107, 103, 103),
-                     )),
-                  
-                 // SizedBox(
-                   // height: 25,
-                   // child: Row(
-                    //  children: [
-                     //   Image.asset(
-                     //     routeForTypes + pkmn.type[0] + '.png',
-                     //   ),
-                      //  pkmn.type.length > 1 ? Image.asset(routeForTypes + pkmn.type[1] + '.png') : const SizedBox.shrink()
-                     // ],
-                   // ),
-                 // ),
+                      height: 3,
+                      width: 100,
+                      child: LinearProgressIndicator(
+                        value: pkmn.exp / pkmn.expToLevelUp,
+                        color: const Color.fromARGB(255, 140, 243, 71),
+                        backgroundColor: const Color.fromARGB(255, 107, 103, 103),
+                      )),
                 ],
               ),
             ),
@@ -99,14 +106,5 @@ class Gamepage extends StatelessWidget {
       }
     }
     return null;
-  }
-
-  Future<void> _startADayCare() async {
-     for (int i = 0; i < 3; i++) {
-      int idx = rng.nextInt(899) + 1;
-      Pkmn pkmn = await fetchPkmn(idx) as Pkmn;
-      dayCare.addPkmn(pkmn);
-     }
-    isReady = true;
   }
 }

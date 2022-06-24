@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:project_wearable_technologies/screen/caloriespage.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/screen/heartpage.dart';
-import 'package:project_wearable_technologies/screen/mealpage.dart';
-import 'package:project_wearable_technologies/screen/loginpage.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
+import 'package:project_wearable_technologies/screen/loginpage.dart';
+import 'package:project_wearable_technologies/screen/mealpage.dart';
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
-import 'package:provider/provider.dart';
-import 'classes/clockTimer.dart';
+
 import 'database/database.dart';
 import 'repository/databaseRepository.dart';
-
-// prova github desktop
-//prova 2
 
 Future<void> main() async {
   //This is a special method that use WidgetFlutterBinding to interact with the Flutter engine.
@@ -22,7 +20,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //This opens the database.
-  final AppDatabase database = await $FloorAppDatabase.databaseBuilder('database.dart').build();
+  final AppDatabase database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   //This creates a new DatabaseRepository from the AppDatabase instance just initialized
   final databaseRepository = DatabaseRepository(database: database);
 

@@ -1,43 +1,67 @@
 import 'package:project_wearable_technologies/database/database.dart';
 import 'package:flutter/material.dart';
 
-import '../database/entities/daycare.dart';
+import '../database/entities/pkmnDb.dart';
 import '../database/entities/activityData.dart';
 
-class DatabaseRepository extends ChangeNotifier{
-
+class DatabaseRepository extends ChangeNotifier {
   final AppDatabase database;
 
   DatabaseRepository({required this.database});
 
-  Future<List<int>?> findAllPkmn() async{
-    final results = await database.daycareDao.findAllPkmn();
+  Future<List<PkmnDb>?> findAllPkmn() async {
+    final results = await database.pkmnDao.findAllPkmn();
     return results;
   }
 
-  Future<void> addPkmn(Daycare pkmn) async {
-    await database.daycareDao.addPkmn(pkmn);
+  Future<void> addPkmn(PkmnDb pkmn) async {
+    await database.pkmnDao.addPkmn(pkmn);
     notifyListeners();
   }
 
-  Future<void> removePkmn(Daycare pkmn) async{
-    await database.daycareDao.removePkmn(pkmn);
+  Future<void> removeAllPkmn() async {
+    await database.pkmnDao.removeAllPkmn();
     notifyListeners();
   }
 
-  Future<List<ActivityData>?> findAllUpdates() async{
+  Future<void> removePkmn(PkmnDb pkmn) async {
+    await database.pkmnDao.removePkmn(pkmn);
+    notifyListeners();
+  }
+
+  Future<List<PkmnDb>?> findPkmnShop() async {
+    final pkmn = await database.pkmnDao.findPkmnShop();
+    return pkmn;
+  }
+
+  Future<List<int>?> findIdPkmnShop() async {
+    final id = await database.pkmnDao.findIdPkmnShop();
+    return id;
+  }
+
+  Future<List<PkmnDb>?> findPkmnDayCare() async {
+    final pkmn = await database.pkmnDao.findPkmnDayCare();
+    return pkmn;
+  }
+
+  Future<List<ActivityData>?> findAllUpdates() async {
     final results = await database.activityDao.findAllUpdates();
     return results;
   }
 
-  Future<void> insertUpdate(ActivityData update) async {
-    await database.activityDao.insertUpdate(update);
+  Future<int> insertUpdate(ActivityData update) async {
+    int idx = await database.activityDao.insertUpdate(update);
     notifyListeners();
+    return idx;
   }
 
-  Future<void> clearActivity() async{
+  Future<void> clearActivity() async {
     await database.activityDao.clearActivity();
     notifyListeners();
   }
-  
+
+  Future<int?> idxLastUpdate() async {
+    int? idx = await database.activityDao.idxLastUpdate();
+    return idx;
+  }
 }//DatabaseRepository

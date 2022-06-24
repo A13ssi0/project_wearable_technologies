@@ -7,10 +7,13 @@ abstract class ActivityDao {
   @Query('SELECT * FROM ActivityData')
   Future<List<ActivityData>?> findAllUpdates();
 
-  @insert
-  Future<void> insertUpdate(ActivityData update);
+  @Query('SELECT MAX(id) FROM ActivityData')
+  Future<int?> idxLastUpdate();
 
-  @Query('DELETE * FROM ActivityData')
+  @insert
+  Future<int> insertUpdate(ActivityData update);
+
+  @Query('DELETE FROM ActivityData')
   Future<void> clearActivity();
 
 }
