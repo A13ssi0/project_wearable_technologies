@@ -1,6 +1,4 @@
-
 class Strings {
-
   // Fitbit Client ID (replace XXX with your client ID)
   static const String fitbitClientID = '238CKZ';
 
@@ -16,6 +14,7 @@ class Strings {
   static String userId = '';
 
   static void writeUserId(String id) => userId = id;
-  
-
+  // Loginpage
+  static const String LoginUserName = '209';
+  static const String LoginPassword = '803';
 }//Strings

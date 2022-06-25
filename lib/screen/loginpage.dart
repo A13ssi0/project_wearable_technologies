@@ -1,67 +1,152 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Loginpage extends StatelessWidget {
-  const Loginpage({Key? key}) : super(key: key);
+class Loginpage extends StatefulWidget {
+  Loginpage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'login';
 
   @override
+  State<Loginpage> createState() => _LoginpageState();
+}
+
+class _LoginpageState extends State<Loginpage> {
+  TextEditingController Usernamecontroller = TextEditingController();
+
+  TextEditingController Passwordcontroller = TextEditingController();
+  String error = '';
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.greenAccent,
+      backgroundColor: Palette.color4,
       appBar: AppBar(
-        title: const Text(Loginpage.routename),
+        backgroundColor: Palette.color5,
+        title: Text(Loginpage.routename),
       ),
       body: Center(
-          child: Column(
-          mainAxisAlignment:MainAxisAlignment.center,
-          children:[
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.lightGreen,
-                ),
-
-                onPressed: () async {
-                print (Strings.userId);
-                // Obtain shared preferences.
-                final prefs = await SharedPreferences.getInstance();
-                String? userId = await FitbitConnector.authorize(
-                    context: context,
-                    clientID: Strings.fitbitClientID,
-                    clientSecret: Strings.fitbitClientSecret,
-                    redirectUri: Strings.fitbitRedirectUri,
-                    callbackUrlScheme: Strings.fitbitCallbackScheme);
-
-                Strings.writeUserId(userId!);
-                //prefs.setString('user', userId!);
-
-                Navigator.pushNamed(context, Homepage.routename);
-              },
-              child: const Text('Tap to Authorize')),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.lightGreen,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.75,
+          height: 400,
+          decoration: BoxDecoration(
+              color: Palette.color2,
+              border: Border.all(
+                width: 0,
+                color: Colors.amberAccent,
               ),
-              onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: Strings.fitbitClientID,
-                  clientSecret: Strings.fitbitClientSecret,
-                );
-              },
-              child: const Text('Tap to Unauthorize'),
-            ),
-          ],
+              borderRadius: BorderRadius.all(Radius.circular(50))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                'Bentornato',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
+                      child: TextField(
+                        controller: Usernamecontroller,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'UserName',
+                            hintText: 'Enter UserName',
+                            contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
+                      child: TextField(
+                        controller: Passwordcontroller,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Password',
+                            hintText: 'Password',
+                            contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    error,
+                    style: TextStyle(color: Colors.red),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.fromLTRB(12, 12, 12, 2),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Palette.color5,
+                        ),
+                        onPressed: () async {
+                          if (Usernamecontroller.text !=
+                                  Strings.LoginUserName ||
+                              Passwordcontroller.text !=
+                                  Strings.LoginPassword) {
+                            setState(() {
+                              error = 'Attenzione uno dei campi è errato';
+                            });
+
+                            return;
+                          }
+                          print(Strings.userId);
+                          // Obtain shared preferences.
+                          final prefs = await SharedPreferences.getInstance();
+                          String? userId = await FitbitConnector.authorize(
+                              context: context,
+                              clientID: Strings.fitbitClientID,
+                              clientSecret: Strings.fitbitClientSecret,
+                              redirectUri: Strings.fitbitRedirectUri,
+                              callbackUrlScheme: Strings.fitbitCallbackScheme);
+
+                          Strings.writeUserId(userId!);
+                          //prefs.setString('user', userId!);
+                          prefs.setString('UserName', Usernamecontroller.text);
+                          prefs.setString('Password', Passwordcontroller.text);
+
+                          Navigator.pushNamed(context, Homepage.routename);
+                        },
+                        child: const Text('Login')),
+                  ),
+                  // ElevatedButton(
+                  // style: ElevatedButton.styleFrom(
+                  // primary: Palette.color5,
+                  //),
+                  //onPressed: () async {
+                  //await FitbitConnector.unauthorize(
+                  //clientID: Strings.fitbitClientID,
+                  //clientSecret: Strings.fitbitClientSecret,
+                  //);
+                  // },
+                  //child: const Text('Tap to Unauthorize')
+                  // ),
+                ],
+              ),
+            ],
           ),
+        ),
       ),
     );
   }
-
-
 }
 
   //build

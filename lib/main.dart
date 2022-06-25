@@ -22,7 +22,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //This opens the database.
-  final AppDatabase database = await $FloorAppDatabase.databaseBuilder('database.dart').build();
+  final AppDatabase database =
+      await $FloorAppDatabase.databaseBuilder('database.dart').build();
   //This creates a new DatabaseRepository from the AppDatabase instance just initialized
   final databaseRepository = DatabaseRepository(database: database);
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: Loginpage.routename,
       routes: {
-        Loginpage.routename: (context) => const Loginpage(),
+        Loginpage.routename: (context) => Loginpage(),
         Homepage.routename: (context) => const Homepage(),
         Mealpage.routename: (context) => const Mealpage(),
         Caloriespage.routename: (context) => const Caloriespage(),
