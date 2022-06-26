@@ -1,8 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/repository/databaseRepository.dart';
+import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
+import 'package:provider/provider.dart';
 
 import '../classes/clockTimer.dart';
+import '../classes/pkmn.dart';
+import '../database/entities/pkmnDb.dart';
 import '../utils/NavBar.dart';
 import '../utils/plotSleep.dart';
 import 'heartpage.dart';
@@ -12,7 +19,6 @@ class Homepage extends StatefulWidget {
 
   static const route = '/';
   static const routename = 'homepage';
-  static var database;
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -22,9 +28,9 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-
     Clock().startTimer(context);
     //money=5000;
+    startApp(context);
   }
 
   @override
@@ -110,3 +116,27 @@ class _HomepageState extends State<Homepage> {
   }
 } //Page
 
+Future<void> startApp(BuildContext context) async {
+  int lastUpdate = await Clock().updateDatabase(context); 
+  var rng = Random();
+  List<PkmnDb>? kk = await Provider.of<DatabaseRepository>(context, listen: false).findPkmnShop();
+  kk ??= [];
+  int startingPkmnShop = kk.length;
+  List<int> idxChoosen = [];
+  for (var i = 0; i < 3-startingPkmnShop; i++) {
+    int value = (rng.nextInt(25)+10)*100;
+    int id = rng.nextInt(800);
+    if (idxChoosen.contains(id)) {
+      i -= 1;
+    } else {
+      idxChoosen.add(id);
+      Pkmn? pkmn = await Gamepage().fetchPkmn(id);
+      int expToLevelUp = pkmn!.expToLevel[pkmn.level]['experience'];
+      String type1 = pkmn.type[0];
+      String type2 = '';
+      pkmn.type.length == 2 ? type2 = pkmn.type[1] : null;
+      PkmnDb pkmnDb = PkmnDb(id: pkmn.id, value:value, idUpdate: lastUpdate, expToLevelUp: expToLevelUp, sprite: pkmn.sprite, name: pkmn.name, isShop: true, type1: type1, type2: type2);
+      await Provider.of<DatabaseRepository>(context, listen: false).addPkmn(pkmnDb);
+    }
+  }
+}

@@ -1,8 +1,10 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/repository/databaseRepository.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Loginpage extends StatefulWidget {

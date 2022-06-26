@@ -1,6 +1,6 @@
 import 'package:project_wearable_technologies/classes/pkmn.dart';
 
-class DayCare {
+class Dayare {
   static List<Pkmn> deposit = [];
   static int money = 0;
 

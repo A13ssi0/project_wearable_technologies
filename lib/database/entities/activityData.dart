@@ -8,6 +8,9 @@ class ActivityData {
 
   final int steps;
   final int calories;
+  final int day; 
+  final int month;
+  final int year;
   
-  ActivityData(this.id, this.steps, this.calories);
+  ActivityData(this.id, this.steps, this.calories, this.day, this.month, this.year);
 }
