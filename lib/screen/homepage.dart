@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/repository/databaseRepository.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:provider/provider.dart';
 
 import '../classes/clockTimer.dart';
@@ -28,6 +29,7 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     Clock().startTimer(context);
+    //money=5000;
     startApp(context);
   }
 
@@ -35,7 +37,7 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Palette.color4,
         title: const Text(Homepage.routename),
       ),
       drawer: const NavBar(),
@@ -44,27 +46,28 @@ class _HomepageState extends State<Homepage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.deepOrangeAccent,
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, HeartPage.routename);
-                },
-                child: SizedBox(
-                  width: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Text(
-                        'Heart',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Icon(
-                        Icons.favorite,
-                        size: 18,
-                      ),
-                    ],
+              Container(
+                margin: EdgeInsets.only(top: 64),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Palette.color3),
+                  onPressed: () {
+                    Navigator.pushNamed(context, HeartPage.routename);
+                  },
+                  child: SizedBox(
+                    width: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: const [
+                        Text(
+                          'Heart',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Icon(
+                          Icons.favorite,
+                          size: 18,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
