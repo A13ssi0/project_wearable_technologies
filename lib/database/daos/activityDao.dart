@@ -6,10 +6,7 @@ abstract class ActivityDao {
 
   @Query('SELECT * FROM ActivityData')
   Future<List<ActivityData>?> findAllUpdates();
-
-  @Query('SELECT MAX(id) FROM ActivityData')
-  Future<int?> idxLastUpdate();
-
+  
   @insert
   Future<int> insertUpdate(ActivityData update);
 

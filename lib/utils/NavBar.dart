@@ -1,9 +1,6 @@
-import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
-import 'package:project_wearable_technologies/utils/strings.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_wearable_technologies/screen/heartpage.dart';
 
 import '../screen/gamepage.dart';
@@ -30,13 +27,6 @@ class NavBar extends StatelessWidget {
             title: const Text('Heart'),
             // ignore: avoid_returning_null_for_void
             onTap: () => Navigator.pushNamed(context, HeartPage.routename),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.run_circle),
-            title: const Text('Steps'),
-            // ignore: avoid_returning_null_for_void
-            onTap: () => null,
           ),
           const Divider(),
           ListTile(

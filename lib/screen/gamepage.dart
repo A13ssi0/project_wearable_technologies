@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 //import 'package:project_wearable_technologies/classes/pkmn.dart';
 import 'package:http/http.dart' as http;
-import 'dart:math';
 
 import 'package:project_wearable_technologies/database/entities/pkmnDb.dart';
 import 'package:provider/provider.dart';
@@ -10,14 +10,34 @@ import 'package:provider/provider.dart';
 import '../classes/pkmn.dart';
 import '../repository/databaseRepository.dart';
 import '../utils/pkmnShop.dart';
+import '../utils/utilsBottomNavBar.dart';
 
-class Gamepage extends StatelessWidget {
-  Gamepage({Key? key}) : super(key: key);
+class Gamepage extends StatefulWidget {
+  const Gamepage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'game';
   static const routeForTypes = 'assets/types/';
-  var rng = Random();
+
+  @override
+  State<Gamepage> createState() => _GamepageState();
+}
+
+class _GamepageState extends State<Gamepage> {
+  final int _currentIndex = 3;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +45,12 @@ class Gamepage extends StatelessWidget {
       builder: (context, db, child) {
         return Scaffold(
           appBar: AppBar(title: const Text('count.toString()')),
-          body: Column(
+          body: PageView(
+          controller: _pageController,
+          //onPageChanged: (index) {
+          //  setState(() => _currentIndex = index);
+          // },
+          children: [Column(
             children: [
               FutureBuilder(
                   future: catchPkmnDayCare(context, db),
@@ -39,8 +64,19 @@ class Gamepage extends StatelessWidget {
                   }),
               ElevatedButton(onPressed: () => db.removeAllPkmn(), child: const Text('delete'))
             ],
-          ),
+          ),],),
           floatingActionButton: FloatingActionButton(onPressed: () => openShop(context)),
+          bottomNavigationBar: BottomNavyBar(
+          selectedIndex: _currentIndex,
+          showElevation: false,
+          onItemSelected: (index) => {
+            //_currentIndex = index;
+            _pageController.animateToPage(index,
+                duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn),
+            changePage(context, index),
+          },
+          items: listBottomNavyBarItem,
+        ),
         );
       },
     );
@@ -86,8 +122,9 @@ class Gamepage extends StatelessWidget {
           );
         });
   }
+}
 
-  Future<Pkmn?> fetchPkmn(int idx) async {
+Future<Pkmn?> fetchPkmn(int idx) async {
     final urlPkmn = 'https://pokeapi.co/api/v2/pokemon/$idx';
     final urlSpec = 'https://pokeapi.co/api/v2/pokemon-species/$idx';
     final responsePkmn = await http.get(Uri.parse(urlPkmn));
@@ -107,4 +144,3 @@ class Gamepage extends StatelessWidget {
     }
     return null;
   }
-}
