@@ -44,26 +44,28 @@ class _GamepageState extends State<Gamepage> {
     return Consumer<DatabaseRepository>(
       builder: (context, db, child) {
         return Scaffold(
-          body: PageView(
-          controller: _pageController,
-          //onPageChanged: (index) {
-          //  setState(() => _currentIndex = index);
-          // },
-          children: [Column(
-            children: [
-              FutureBuilder(
-                  future: catchPkmnDayCare(context, db),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      List<PkmnDb> dayCare = snapshot.data as List<PkmnDb>;
-                      return plotDayCare(context, dayCare);
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
-                  }),
-              ElevatedButton(onPressed: () => db.removeAllPkmn(), child: const Text('delete'))
-            ],
-          ),],),
+          body: SafeArea(
+            child: PageView(
+            controller: _pageController,
+            children: [ListView(
+              children: [Column(
+                children: [
+                  title(),
+                  FutureBuilder(
+                      future: catchPkmnDayCare(context, db),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          List<PkmnDb> dayCare = snapshot.data as List<PkmnDb>;
+                          return plotDayCare(context, dayCare);
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      }),
+                  ElevatedButton(onPressed: () => db.removeAllPkmn(), child: const Text('delete'))
+                ],
+              ),],
+            ),],),
+          ),
           floatingActionButton: FloatingActionButton(onPressed: () => openShop(context)),
           bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
@@ -120,6 +122,30 @@ class _GamepageState extends State<Gamepage> {
             ),
           );
         });
+  }
+
+  Widget title() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 25,
+        ),
+        Row(
+          children: const [
+            SizedBox(
+              width: 30,
+            ),
+            Text('Daycare',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 40, color: Colors.blue, fontFamily: 'Lobster')),
+          ],
+        ),
+        const SizedBox(
+          height: 23,
+        ),
+      ],
+    );
   }
 }
 

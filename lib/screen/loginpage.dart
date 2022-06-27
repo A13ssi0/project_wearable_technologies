@@ -88,10 +88,7 @@ class _LoginpageState extends State<Loginpage> {
               const Text(
 
                 'Bentornato',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -131,6 +128,7 @@ class _LoginpageState extends State<Loginpage> {
                   )
                 ],
               ),
+
               Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -161,39 +159,53 @@ class _LoginpageState extends State<Loginpage> {
                             // Obtain shared preferences.
                            Login();
 
-                          },
-                          child: const Text('Login')),
-                    ),
-                    // ElevatedButton(
-                    // style: ElevatedButton.styleFrom(
-                    // primary: Palette.color5,
-                    //),
-                    //onPressed: () async {
-                    //await FitbitConnector.unauthorize(
-                    //clientID: Strings.fitbitClientID,
-                    //clientSecret: Strings.fitbitClientSecret,
-                    //);
-                    // },
-                    //child: const Text('Tap to Unauthorize')
-                    // ),
-                  ],
-                ),
+
+                            return;
+                          }
+                          // Obtain shared preferences.
+                          final prefs = await SharedPreferences.getInstance();
+                          String? userId = await FitbitConnector.authorize(
+                              context: context,
+                              clientID: Strings.fitbitClientID,
+                              clientSecret: Strings.fitbitClientSecret,
+                              redirectUri: Strings.fitbitRedirectUri,
+                              callbackUrlScheme: Strings.fitbitCallbackScheme);
+
+                          Strings.writeUserId(userId!);
+                          //prefs.setString('user', userId!);
+                          prefs.setString('UserName', Usernamecontroller.text);
+                          prefs.setString('Password', Passwordcontroller.text);
+                          prefs.setInt('Money', 5000);
+
+                          Navigator.pushNamed(context, Homepage.routename);
+                        },
+                        child: const Text('Login')),
+                  ),
+                ],
+
               ),
               ElevatedButton(
-              onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: Strings.fitbitClientID,
-                  clientSecret: Strings.fitbitClientSecret,
-                );
-              },
-              child: const Text('Tap to Unauthorize'),
-            ),
-            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(), child: const Text('delete pkmn')),
-            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(), child: const Text('delete data'))
-          ],
+                onPressed: () async {
+                  await FitbitConnector.unauthorize(
+                    clientID: Strings.fitbitClientID,
+                    clientSecret: Strings.fitbitClientSecret,
+                  );
+                },
+                child: const Text('Tap to Unauthorize'),
+              ),
+              ElevatedButton(
+                  onPressed: () async =>
+                      await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(),
+                  child: const Text('delete pkmn')),
+              ElevatedButton(
+                  onPressed: () async =>
+                      await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(),
+                  child: const Text('delete data'))
+            ],
+          ),
         ),
-      ),),);
-    
+      ),
+    );
   }
 }
 
