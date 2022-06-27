@@ -43,10 +43,7 @@ class _LoginpageState extends State<Loginpage> {
             children: [
               const Text(
                 'Bentornato',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -96,17 +93,14 @@ class _LoginpageState extends State<Loginpage> {
                           primary: Palette.color5,
                         ),
                         onPressed: () async {
-                          if (Usernamecontroller.text !=
-                                  Strings.LoginUserName ||
-                              Passwordcontroller.text !=
-                                  Strings.LoginPassword) {
+                          if (Usernamecontroller.text != Strings.LoginUserName ||
+                              Passwordcontroller.text != Strings.LoginPassword) {
                             setState(() {
                               error = 'Attenzione uno dei campi è errato';
                             });
 
                             return;
                           }
-                          print(Strings.userId);
                           // Obtain shared preferences.
                           final prefs = await SharedPreferences.getInstance();
                           String? userId = await FitbitConnector.authorize(
@@ -120,40 +114,36 @@ class _LoginpageState extends State<Loginpage> {
                           //prefs.setString('user', userId!);
                           prefs.setString('UserName', Usernamecontroller.text);
                           prefs.setString('Password', Passwordcontroller.text);
+                          prefs.setInt('Money', 5000);
 
                           Navigator.pushNamed(context, Homepage.routename);
                         },
                         child: const Text('Login')),
                   ),
-                  // ElevatedButton(
-                  // style: ElevatedButton.styleFrom(
-                  // primary: Palette.color5,
-                  //),
-                  //onPressed: () async {
-                  //await FitbitConnector.unauthorize(
-                  //clientID: Strings.fitbitClientID,
-                  //clientSecret: Strings.fitbitClientSecret,
-                  //);
-                  // },
-                  //child: const Text('Tap to Unauthorize')
-                  // ),
                 ],
               ),
               ElevatedButton(
-              onPressed: () async {
-                await FitbitConnector.unauthorize(
-                  clientID: Strings.fitbitClientID,
-                  clientSecret: Strings.fitbitClientSecret,
-                );
-              },
-              child: const Text('Tap to Unauthorize'),
-            ),
-            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(), child: const Text('delete pkmn')),
-            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(), child: const Text('delete data'))
-          ],
+                onPressed: () async {
+                  await FitbitConnector.unauthorize(
+                    clientID: Strings.fitbitClientID,
+                    clientSecret: Strings.fitbitClientSecret,
+                  );
+                },
+                child: const Text('Tap to Unauthorize'),
+              ),
+              ElevatedButton(
+                  onPressed: () async =>
+                      await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(),
+                  child: const Text('delete pkmn')),
+              ElevatedButton(
+                  onPressed: () async =>
+                      await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(),
+                  child: const Text('delete data'))
+            ],
+          ),
         ),
-      ),),);
-    
+      ),
+    );
   }
 }
 

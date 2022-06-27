@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/repository/databaseRepository.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
-import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:provider/provider.dart';
 
 import '../classes/clockTimer.dart';
@@ -36,7 +35,6 @@ class _HomepageState extends State<Homepage> {
     super.initState();
     _pageController = PageController();
     Clock().startTimer(context);
-    //money=5000;
     startApp(context);
   }
 
@@ -57,16 +55,12 @@ class _HomepageState extends State<Homepage> {
         drawer: const NavBar(),
         body: PageView(
           controller: _pageController,
-          //onPageChanged: (index) {
-          //  setState(() => _currentIndex = index);
-          // },
           children: [_bodyHomepage(context)],
         ),
         bottomNavigationBar: BottomNavyBar(
           selectedIndex: _currentIndex,
           showElevation: false,
           onItemSelected: (index) => {
-            //_currentIndex = index;
             _pageController.animateToPage(index,
                 duration: const Duration(milliseconds: 1), curve: Curves.fastOutSlowIn),
             changePage(context, index),
