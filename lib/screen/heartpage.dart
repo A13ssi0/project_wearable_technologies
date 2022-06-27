@@ -83,7 +83,11 @@ class _HeartPageState extends State<HeartPage> {
               Column(
                 children: [
                   title(),
-                  (heartdata.isEmpty) ? Container() : plotHearth(context, heartdata),
+                  (heartdata.isEmpty) ? Image.asset(
+                    'assets/jigglypuff.gif',
+                    height:MediaQuery.of(context).size.width,
+                    width: MediaQuery.of(context).size.width,
+                  ) : plotHearth(context, heartdata),
                   Container(
                       margin: const EdgeInsets.fromLTRB(12, 12, 0, 32),
                       child: Column(

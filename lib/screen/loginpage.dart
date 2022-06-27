@@ -23,18 +23,18 @@ class _LoginpageState extends State<Loginpage> {
   TextEditingController Passwordcontroller = TextEditingController();
   String error = '';
   @override
-  void initState()  {
+  void initState() {
     super.initState();
     excuteLogin();
-
   }
+
   Future<void> excuteLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('user')!=null){
+    if (prefs.getString('user') != null) {
       Login();
     }
-
   }
+
   Future<void> Login() async {
     final prefs = await SharedPreferences.getInstance();
     String? userId = await FitbitConnector.authorize(
@@ -45,9 +45,10 @@ class _LoginpageState extends State<Loginpage> {
         callbackUrlScheme: Strings.fitbitCallbackScheme);
 
     Strings.writeUserId(userId!);
-    prefs.setString('user', userId!);
+    prefs.setString('user', userId);
     prefs.setString('UserName', Usernamecontroller.text);
     prefs.setString('Password', Passwordcontroller.text);
+    prefs.setInt('Money', 5000);
 
     Navigator.pushNamed(context, Homepage.routename);
   }
@@ -70,23 +71,17 @@ class _LoginpageState extends State<Loginpage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-
               Container(
-                margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+                margin: const EdgeInsets.fromLTRB(0, 13, 0, 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     'assets/Jigglypuff2.jpg',
-                    width: MediaQuery.of(context).size.width*0.65,
+                    width: MediaQuery.of(context).size.width * 0.65,
                   ),
-
                 ),
               ),
-
-
-
               const Text(
-
                 'Bentornato',
                 style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
               ),
@@ -128,61 +123,36 @@ class _LoginpageState extends State<Loginpage> {
                   )
                 ],
               ),
-
-              Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-
-                    Container(
-                      margin: EdgeInsets.fromLTRB(12, 12, 12, 2),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Palette.color5,
-                          ),
-                          onPressed: () async {
-                            if (Usernamecontroller.text !=
-                                    Strings.LoginUserName ||
-                                Passwordcontroller.text !=
-                                    Strings.LoginPassword) {
-                              setState(() {
-                                error = 'Attenzione uno dei campi è errato';
-                              });
-
-                              return;
-                            }
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(12, 12, 12, 2),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Palette.color5,
+                        ),
+                        onPressed: () async {
+                          if (Usernamecontroller.text != Strings.LoginUserName ||
+                              Passwordcontroller.text != Strings.LoginPassword) {
                             setState(() {
-                              error = '';
+                              error = 'Attenzione uno dei campi è errato';
                             });
-                            print(Strings.userId);
-                            // Obtain shared preferences.
-                           Login();
-
 
                             return;
                           }
+                          setState(() {
+                            error = '';
+                          });
                           // Obtain shared preferences.
-                          final prefs = await SharedPreferences.getInstance();
-                          String? userId = await FitbitConnector.authorize(
-                              context: context,
-                              clientID: Strings.fitbitClientID,
-                              clientSecret: Strings.fitbitClientSecret,
-                              redirectUri: Strings.fitbitRedirectUri,
-                              callbackUrlScheme: Strings.fitbitCallbackScheme);
+                          Login();
 
-                          Strings.writeUserId(userId!);
-                          //prefs.setString('user', userId!);
-                          prefs.setString('UserName', Usernamecontroller.text);
-                          prefs.setString('Password', Passwordcontroller.text);
-                          prefs.setInt('Money', 5000);
-
-                          Navigator.pushNamed(context, Homepage.routename);
+                          return;
                         },
+                        // Obtain shared preferences.
                         child: const Text('Login')),
                   ),
                 ],
-
               ),
               ElevatedButton(
                 onPressed: () async {

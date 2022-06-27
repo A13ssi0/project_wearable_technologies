@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/screen/heartpage.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screen/gamepage.dart';
 import '../screen/loginpage.dart';
