@@ -81,8 +81,6 @@ class _LoginpageState extends State<Loginpage> {
                   child: Image.asset(
                     'assets/Jigglypuff2.jpg',
                     width: MediaQuery.of(context).size.width*0.65,
-
-
                   ),
 
                 ),
@@ -161,21 +159,7 @@ class _LoginpageState extends State<Loginpage> {
                             });
                             print(Strings.userId);
                             // Obtain shared preferences.
-                            final prefs = await SharedPreferences.getInstance();
-                            String? userId = await FitbitConnector.authorize(
-                                context: context,
-                                clientID: Strings.fitbitClientID,
-                                clientSecret: Strings.fitbitClientSecret,
-                                redirectUri: Strings.fitbitRedirectUri,
-                                callbackUrlScheme: Strings.fitbitCallbackScheme);
-
-                            Strings.writeUserId(userId!);
-                            prefs.setString('user', userId!);
-                            print (userId);
-                            prefs.setString('UserName', Usernamecontroller.text);
-                            prefs.setString('Password', Passwordcontroller.text);
-
-                            Navigator.pushNamed(context, Homepage.routename);
+                           Login();
 
                           },
                           child: const Text('Login')),

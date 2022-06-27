@@ -66,7 +66,6 @@ class NavBar extends StatelessWidget {
                   clientSecret: Strings.fitbitClientSecret,
                 ).then((value) => {
 
-                      // permette di aspettare infatti ho tolto await
                       Navigator.of(context)
                           .popUntil(ModalRoute.withName(Loginpage.routename))
                     });
