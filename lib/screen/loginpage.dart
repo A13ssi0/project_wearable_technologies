@@ -22,6 +22,35 @@ class _LoginpageState extends State<Loginpage> {
 
   TextEditingController Passwordcontroller = TextEditingController();
   String error = '';
+  @override
+  void initState()  {
+    super.initState();
+    excuteLogin();
+
+  }
+  Future<void> excuteLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getString('user')!=null){
+      Login();
+    }
+
+  }
+  Future<void> Login() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userId = await FitbitConnector.authorize(
+        context: context,
+        clientID: Strings.fitbitClientID,
+        clientSecret: Strings.fitbitClientSecret,
+        redirectUri: Strings.fitbitRedirectUri,
+        callbackUrlScheme: Strings.fitbitCallbackScheme);
+
+    Strings.writeUserId(userId!);
+    prefs.setString('user', userId!);
+    prefs.setString('UserName', Usernamecontroller.text);
+    prefs.setString('Password', Passwordcontroller.text);
+
+    Navigator.pushNamed(context, Homepage.routename);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +59,7 @@ class _LoginpageState extends State<Loginpage> {
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.75,
-          height: 400,
+          height: 500,
           decoration: BoxDecoration(
               color: Palette.color2,
               border: Border.all(
@@ -41,7 +70,23 @@ class _LoginpageState extends State<Loginpage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'assets/Jigglypuff2.jpg',
+                    width: MediaQuery.of(context).size.width*0.65,
+                  ),
+
+                ),
+              ),
+
+
+
               const Text(
+
                 'Bentornato',
                 style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
               ),
@@ -83,21 +128,37 @@ class _LoginpageState extends State<Loginpage> {
                   )
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(12, 12, 12, 2),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Palette.color5,
-                        ),
-                        onPressed: () async {
-                          if (Usernamecontroller.text != Strings.LoginUserName ||
-                              Passwordcontroller.text != Strings.LoginPassword) {
+
+              Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+
+                    Container(
+                      margin: EdgeInsets.fromLTRB(12, 12, 12, 2),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Palette.color5,
+                          ),
+                          onPressed: () async {
+                            if (Usernamecontroller.text !=
+                                    Strings.LoginUserName ||
+                                Passwordcontroller.text !=
+                                    Strings.LoginPassword) {
+                              setState(() {
+                                error = 'Attenzione uno dei campi è errato';
+                              });
+
+                              return;
+                            }
                             setState(() {
-                              error = 'Attenzione uno dei campi è errato';
+                              error = '';
                             });
+                            print(Strings.userId);
+                            // Obtain shared preferences.
+                           Login();
+
 
                             return;
                           }
@@ -121,6 +182,7 @@ class _LoginpageState extends State<Loginpage> {
                         child: const Text('Login')),
                   ),
                 ],
+
               ),
               ElevatedButton(
                 onPressed: () async {

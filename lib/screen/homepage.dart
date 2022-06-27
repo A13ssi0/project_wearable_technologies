@@ -47,7 +47,6 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: const Text(Homepage.routename),
@@ -77,6 +76,13 @@ Widget _bodyHomepage(BuildContext context) {
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+        Container(
+                child: Image.asset(
+                  'assets/jigglypuff.gif',
+                  height:MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: Colors.deepOrangeAccent,

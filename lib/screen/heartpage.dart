@@ -75,6 +75,7 @@ class _HeartPageState extends State<HeartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+
         child: PageView(
           controller: _pageController,
           children: [
@@ -180,6 +181,7 @@ class _HeartPageState extends State<HeartPage> {
               ),
             ]),
           ],
+
         ),
       ),
       bottomNavigationBar: BottomNavyBar(
