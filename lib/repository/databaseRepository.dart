@@ -60,8 +60,4 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<int?> idxLastUpdate() async {
-    int? idx = await database.activityDao.idxLastUpdate();
-    return idx;
-  }
 }//DatabaseRepository

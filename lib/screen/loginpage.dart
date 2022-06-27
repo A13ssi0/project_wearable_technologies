@@ -143,8 +143,17 @@ class _LoginpageState extends State<Loginpage> {
                   // ),
                 ],
               ),
-            ],
-          ),
+              onPressed: () async {
+                await FitbitConnector.unauthorize(
+                  clientID: Strings.fitbitClientID,
+                  clientSecret: Strings.fitbitClientSecret,
+                );
+              },
+              child: const Text('Tap to Unauthorize'),
+            ),
+            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(), child: const Text('delete pkmn')),
+            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(), child: const Text('delete data'))
+          ],
         ),
       ),
     );

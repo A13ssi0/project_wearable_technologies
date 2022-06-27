@@ -9,11 +9,11 @@ import '../database/entities/activityData.dart';
 import '../utils/manageFitBitData.dart';
 
 class Clock {
-  void startTimer(BuildContext context) {
+  Future<void> startTimer(BuildContext context) async {
     Timer.periodic(
       const Duration(minutes: 10),
-      (Timer t) {
-        updateDatabase(context);
+      (Timer t) async {
+        await updateDatabase(context);
       },
     );
   }
