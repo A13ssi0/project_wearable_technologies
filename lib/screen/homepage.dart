@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:project_wearable_technologies/repository/databaseRepository.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/screen/steppage.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:provider/provider.dart';
 
 import '../classes/clockTimer.dart';
@@ -35,6 +36,7 @@ class _HomepageState extends State<Homepage> {
     super.initState();
     _pageController = PageController();
     Clock().startTimer(context);
+    //money=5000;
     startApp(context);
   }
 
@@ -47,6 +49,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         appBar: AppBar(
           backgroundColor: Colors.green,
           title: const Text(Homepage.routename),
@@ -95,6 +98,7 @@ Widget _bodyHomepage(BuildContext context) {
                   Text(
                     'Heart',
                     style: TextStyle(fontSize: 20),
+    
                   ),
                   Icon(
                     Icons.favorite,

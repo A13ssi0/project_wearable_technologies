@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 
 import '../utils/manageFitBitData.dart';
 import '../utils/utilsBottomNavBar.dart';
@@ -38,6 +39,7 @@ class _HeartPageState extends State<HeartPage> {
   Future<void> loading() async {
     var data = await fetchHeartDataSettimana();
     var dato = await fetchHeartDataMese();
+    print(data[6]);
     if (heartdata.isEmpty) {
       setState(() {
         heartdata = data;
@@ -75,6 +77,7 @@ class _HeartPageState extends State<HeartPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(HeartPage.routename),
+        backgroundColor: Palette.color3,
       ),
       body: PageView(
         controller: _pageController,

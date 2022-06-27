@@ -49,8 +49,16 @@ class NavBar extends StatelessWidget {
                 //await logOut();
                 //print('exit logout');
                 //print(Strings.userId);
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName(Loginpage.routename));
+                FitbitConnector.unauthorize(
+                  clientID: Strings.fitbitClientID,
+                  clientSecret: Strings.fitbitClientSecret,
+                ).then((value) => {
+                      // permette di aspettare infatti ho tolto await
+                      Navigator.of(context)
+                          .popUntil(ModalRoute.withName(Loginpage.routename))
+                    });
+                // Navigator.of(context)
+                //   .popUntil(ModalRoute.withName(Loginpage.routename));
               }),
           const Divider(),
         ],
@@ -58,13 +66,13 @@ class NavBar extends StatelessWidget {
     );
   }
 
- // Future<void> logOut() async {
-   // await FitbitConnector.unauthorize(
-     // clientID: Strings.userId,
-      //clientSecret: Strings.fitbitClientSecret,
-    //);
-    //final prefs = await SharedPreferences.getInstance();
-    //await prefs.remove('user');
-    //print('finished logout');
+  // Future<void> logOut() async {
+  // await FitbitConnector.unauthorize(
+  // clientID: Strings.userId,
+  //clientSecret: Strings.fitbitClientSecret,
+  //);
+  //final prefs = await SharedPreferences.getInstance();
+  //await prefs.remove('user');
+  //print('finished logout');
   //}
 }
