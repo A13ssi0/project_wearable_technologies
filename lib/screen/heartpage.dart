@@ -1,9 +1,10 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_wearable_technologies/utils/palette.dart';
 
 import '../utils/manageFitBitData.dart';
+import '../utils/utilsBottomNavBar.dart';
 
 class HeartPage extends StatefulWidget {
   //const HeartPage({Key? key}) : super(key: key);
@@ -16,12 +17,22 @@ class HeartPage extends StatefulWidget {
 }
 
 class _HeartPageState extends State<HeartPage> {
+  final int _currentIndex = 1;
+  late PageController _pageController;
+
   var heartdata = [];
   var heartdatamonth = [];
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     loading();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Future<void> loading() async {
@@ -63,121 +74,128 @@ class _HeartPageState extends State<HeartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(HeartPage.routename),
-        backgroundColor: Palette.color3,
-      ),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              title(),
-              (heartdata.isEmpty)
-                  ? Container(
+      body: SafeArea(
+          child:PageView(
+        controller: _pageController,
+        children: [ ListView(
+          children: [Column(
+              children: [
+                title(),
+                (heartdata.isEmpty) ? ? Container(
                 child: Image.asset(
                   'assets/jigglypuff.gif',
                   height:MediaQuery.of(context).size.width,
                   width: MediaQuery.of(context).size.width,
                 ),
 
-              )
-                  : plotHearth(context, heartdata),
-              Container(
-                  margin: const EdgeInsets.fromLTRB(12, 12, 0, 32),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                                child: const Text(''),
-                                color: Colors.pinkAccent,
-                                padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: Container(
-                                child: const Text('caloriesFatBurn'),
-                                padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                            flex: 10,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                                child: const Text(''),
-                                color: Colors.lightBlueAccent,
-                                padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: Container(
-                                child: const Text('caloriesPeak'),
-                                padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                            flex: 10,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                                child: const Text(''),
-                                color: Colors.deepOrangeAccent,
-                                padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: Container(
-                                child: const Text('caloriesCardio'),
-                                padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                            flex: 10,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                                child: const Text(''),
-                                color: Colors.white,
-                                padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: Container(
-                                child: Text('MeanWeekCaloriesFatBurn: ' +
-                                    mediaweek().toString()),
-                                padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                            flex: 10,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                                child: const Text(''),
-                                color: Colors.white,
-                                padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                            flex: 1,
-                          ),
-                          Expanded(
-                            child: Container(
-                                child: Text('MeanMonthCaloriesFatBurn: ' +
-                                    mediamonth().toString()),
-                                padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                            flex: 10,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ))
-            ],
-          ),
+              ) : plotHearth(context, heartdata),
+                Container(
+                    margin: const EdgeInsets.fromLTRB(12, 12, 0, 32),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  child: const Text(''),
+                                  color: Colors.pinkAccent,
+                                  padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Container(
+                                  child: const Text('caloriesFatBurn'),
+                                  padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              flex: 10,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  child: const Text(''),
+                                  color: Colors.lightBlueAccent,
+                                  padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Container(
+                                  child: const Text('caloriesPeak'),
+                                  padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              flex: 10,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  child: const Text(''),
+                                  color: Colors.deepOrangeAccent,
+                                  padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Container(
+                                  child: const Text('caloriesCardio'),
+                                  padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              flex: 10,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  child: const Text(''),
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Container(
+                                  child: Text('MeanWeekCaloriesFatBurn: ' + mediaweek().toString()),
+                                  padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              flex: 10,
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                  child: const Text(''),
+                                  color: Colors.white,
+                                  padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
+                              flex: 1,
+                            ),
+                            Expanded(
+                              child: Container(
+                                  child: Text('MeanMonthCaloriesFatBurn: ' + mediamonth().toString()),
+                                  padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
+                              flex: 10,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ))
+              ],
+            ),],
         ),
+        
+        ],
+      ),),
+       bottomNavigationBar: BottomNavyBar(
+        selectedIndex: _currentIndex,
+        showElevation: false,
+        onItemSelected: (index) => {
+          //_currentIndex = index;
+          _pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 1), curve: Curves.easeIn),
+          changePage(context, index),
+        },
+        items: listBottomNavyBarItem,
       ),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.cached),
@@ -204,8 +222,7 @@ class _HeartPageState extends State<HeartPage> {
             ),
             Text('Heart',
                 textAlign: TextAlign.start,
-                style: TextStyle(
-                    fontSize: 40, color: Colors.blue, fontFamily: 'Lobster')),
+                style: TextStyle(fontSize: 40, color: Colors.blue, fontFamily: 'Lobster')),
           ],
         ),
         const SizedBox(
@@ -257,9 +274,7 @@ Widget plotHearth(BuildContext context, List heartdata) {
                   toY: getvalue(i, 3, heartdata),
                   color: Colors.lightBlueAccent,
                 ),
-                BarChartRodData(
-                    toY: getvalue(i, 4, heartdata),
-                    color: Colors.deepOrangeAccent),
+                BarChartRodData(toY: getvalue(i, 4, heartdata), color: Colors.deepOrangeAccent),
               ],
             ),
         ],
@@ -288,24 +303,12 @@ double getvalue(int index, int Id, List heartdata) {
 //}
 Widget bottomTitles(double value, TitleMeta meta) {
   List<String> titles = [
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 6)))
-        .substring(0, 2),
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 5)))
-        .substring(0, 2),
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 4)))
-        .substring(0, 2),
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 3)))
-        .substring(0, 2),
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 2)))
-        .substring(0, 2),
-    DateFormat('EEEE')
-        .format(DateTime.now().subtract(const Duration(days: 1)))
-        .substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 6))).substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 5))).substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 4))).substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 3))).substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 2))).substring(0, 2),
+    DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 1))).substring(0, 2),
     DateFormat('EEEE').format(DateTime.now()).substring(0, 2)
   ];
 

@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Loginpage extends StatefulWidget {
-  Loginpage({Key? key}) : super(key: key);
+  const Loginpage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'login';
@@ -56,10 +56,6 @@ class _LoginpageState extends State<Loginpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.color4,
-      appBar: AppBar(
-        backgroundColor: Palette.color5,
-        title: Text(Loginpage.routename),
-      ),
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.75,
@@ -70,10 +66,11 @@ class _LoginpageState extends State<Loginpage> {
                 width: 0,
                 color: Colors.amberAccent,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(50))),
+              borderRadius: const BorderRadius.all(Radius.circular(50))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+
               Container(
                 margin: EdgeInsets.fromLTRB(0, 13, 0, 0),
                 child: ClipRRect(
@@ -86,7 +83,10 @@ class _LoginpageState extends State<Loginpage> {
                 ),
               ),
 
-              Text(
+
+
+              const Text(
+
                 'Bentornato',
                 style: TextStyle(
                     color: Colors.white,
@@ -102,7 +102,7 @@ class _LoginpageState extends State<Loginpage> {
                       padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
                       child: TextField(
                         controller: Usernamecontroller,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'UserName',
                             hintText: 'Enter UserName',
@@ -117,7 +117,7 @@ class _LoginpageState extends State<Loginpage> {
                       child: TextField(
                         controller: Passwordcontroller,
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: 'Password',
                             hintText: 'Password',
@@ -127,7 +127,7 @@ class _LoginpageState extends State<Loginpage> {
                   ),
                   Text(
                     error,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   )
                 ],
               ),
@@ -179,11 +179,21 @@ class _LoginpageState extends State<Loginpage> {
                   ],
                 ),
               ),
-            ],
-          ),
+              ElevatedButton(
+              onPressed: () async {
+                await FitbitConnector.unauthorize(
+                  clientID: Strings.fitbitClientID,
+                  clientSecret: Strings.fitbitClientSecret,
+                );
+              },
+              child: const Text('Tap to Unauthorize'),
+            ),
+            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(), child: const Text('delete pkmn')),
+            ElevatedButton(onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).clearActivity(), child: const Text('delete data'))
+          ],
         ),
-      ),
-    );
+      ),),);
+    
   }
 }
 

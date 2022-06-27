@@ -30,11 +30,6 @@ class _TextSleepState extends State<TextSleep> {
                 child: constructTextSleep(),
                 width: widget.widthBar,
               ),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('return'))
       ],
     );
   }
