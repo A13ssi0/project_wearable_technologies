@@ -59,10 +59,13 @@ class NavBar extends StatelessWidget {
                 //await logOut();
                 //print('exit logout');
                 //print(Strings.userId);
+                final prefs = await SharedPreferences.getInstance();
+                prefs.remove('user');
                 FitbitConnector.unauthorize(
                   clientID: Strings.fitbitClientID,
                   clientSecret: Strings.fitbitClientSecret,
                 ).then((value) => {
+
                       // permette di aspettare infatti ho tolto await
                       Navigator.of(context)
                           .popUntil(ModalRoute.withName(Loginpage.routename))

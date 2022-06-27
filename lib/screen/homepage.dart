@@ -47,7 +47,14 @@ class _HomepageState extends State<Homepage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 64),
+                child: Image.asset(
+                  'assets/jigglypuff.gif',
+                  height:MediaQuery.of(context).size.width,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
+              Container(
+                //margin: EdgeInsets.only(top: 0),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: Palette.color3),
                   onPressed: () {
@@ -71,7 +78,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              ElevatedButton(
+              /*ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, Steppage.routename);
                 },
@@ -85,10 +92,8 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
+              ),*/
+
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Card(
