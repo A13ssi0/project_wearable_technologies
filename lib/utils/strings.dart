@@ -15,6 +15,6 @@ class Strings {
 
   static void writeUserId(String id) => userId = id;
   // Loginpage
-  static const String LoginUserName = '209';
-  static const String LoginPassword = '803';
+  static const String LoginUserName = 'a';
+  static const String LoginPassword = 'a';
 }//Strings

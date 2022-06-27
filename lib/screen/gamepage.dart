@@ -44,7 +44,6 @@ class _GamepageState extends State<Gamepage> {
     return Consumer<DatabaseRepository>(
       builder: (context, db, child) {
         return Scaffold(
-          appBar: AppBar(title: const Text('count.toString()')),
           body: PageView(
           controller: _pageController,
           //onPageChanged: (index) {
