@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 class Palette {
-  static Color color1 = HexColor.fromHex('A2D2FF');
-  static Color color2 = HexColor.fromHex('BDE0FE');
-  static Color color3 = HexColor.fromHex('FFAFCC');
-  static Color color4 = HexColor.fromHex('FFC8DD');
-  static Color color5 = HexColor.fromHex('CDB4DB');
+  static Color color1 = HexColor.fromHex('006ba6');
+  static Color color2 = HexColor.fromHex('0496ff');
+  static Color color3 = HexColor.fromHex('ffbc42');
+  static Color color4 = HexColor.fromHex('d81159');
+  static Color color5 = HexColor.fromHex('8f2d56');
 }
 
 extension HexColor on Color {

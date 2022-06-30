@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 
 import 'package:project_wearable_technologies/utils/textSleep.dart';
 
@@ -21,7 +22,7 @@ class ButtonRowBar extends StatefulWidget {
 
 class _ButtonRowBarState extends State<ButtonRowBar> {
   static final List<bool> _isSelected = [false, false, false];
-  final Color _retroColor = Colors.blue;
+  final Color _retroColor = Palette.color3;
   final Color _backSelectColor = Colors.white;
 
   @override

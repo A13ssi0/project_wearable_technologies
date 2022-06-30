@@ -15,6 +15,17 @@ class DatabaseRepository extends ChangeNotifier {
   }
 
   Future<void> addPkmn(PkmnDb pkmn) async {
+    pkmn.isShop = false;
+    List<PkmnDb>? dayCare = await database.pkmnDao.findPkmnDayCare();
+    dayCare ??= []; 
+    pkmn.entry =  dayCare.where((e) => e.id == pkmn.id).length;
+    await database.pkmnDao.addPkmn(pkmn);
+    notifyListeners();
+  }
+
+  Future<void> addPkmnToShop(PkmnDb pkmn) async {
+    pkmn.isShop = true;
+    pkmn.entry = -1;
     await database.pkmnDao.addPkmn(pkmn);
     notifyListeners();
   }
@@ -29,14 +40,23 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> removePkmnFromShop(PkmnDb pkmn) async {
+    await database.pkmnDao.removePkmnFromShop(pkmn);
+    notifyListeners();
+  }
+
+  Future<void> updatePkmn(PkmnDb pkmn) async{
+    await database.pkmnDao.updatePkmn(pkmn);
+    notifyListeners();
+  }
+
   Future<List<PkmnDb>?> findPkmnShop() async {
     final pkmn = await database.pkmnDao.findPkmnShop();
     return pkmn;
   }
 
-  Future<List<int>?> findIdPkmnShop() async {
-    final id = await database.pkmnDao.findIdPkmnShop();
-    return id;
+  Future<void> removeListPkmn(List<PkmnDb> pkmn)async{
+    await database.pkmnDao.removeListPkmn(pkmn);
   }
 
   Future<List<PkmnDb>?> findPkmnDayCare() async {
@@ -53,6 +73,11 @@ class DatabaseRepository extends ChangeNotifier {
     int idx = await database.activityDao.insertUpdate(update);
     notifyListeners();
     return idx;
+  }
+
+  Future<ActivityData?> findUpdateById(int id) async {
+    ActivityData? update = await database.activityDao.findUpdateById(id);
+    return update;
   }
 
   Future<void> clearActivity() async {

@@ -2,15 +2,14 @@ import 'package:floor/floor.dart';
 
 @entity
 class ActivityData {
-
   @PrimaryKey(autoGenerate: true)
-  final int? id;
+  int? id;
 
-  final int steps;
-  final int calories;
-  final int day; 
-  final int month;
-  final int year;
-  
+  int steps;
+  int calories;
+  int day;
+  int month;
+  int year;
+
   ActivityData(this.id, this.steps, this.calories, this.day, this.month, this.year);
 }

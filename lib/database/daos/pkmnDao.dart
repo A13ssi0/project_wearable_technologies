@@ -13,18 +13,21 @@ abstract class PkmnDao {
   @Query('SELECT * FROM PkmnDb WHERE isShop = False')
   Future<List<PkmnDb>?> findPkmnDayCare();
 
-  @Query('SELECT id FROM PkmnDb WHERE isShop = True')
-  Future<List<int>?> findIdPkmnShop();
-
   @insert
   Future<void> addPkmn(PkmnDb pkmn);
+
+  @Update(onConflict:OnConflictStrategy.replace)
+  Future<void> updatePkmn(PkmnDb pkmn);
 
   @delete
   Future<void> removePkmn(PkmnDb pkmn);
 
+  @delete
+  Future<void> removeListPkmn(List<PkmnDb> pkmn);
+
   @Query('DELETE FROM PkmnDb')
   Future<void> removeAllPkmn();
 
-  
-
+  @Update(onConflict:OnConflictStrategy.replace)
+  Future<void> removePkmnFromShop(PkmnDb pkmn);
 }

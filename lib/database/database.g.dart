@@ -84,7 +84,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `PkmnDb` (`id` INTEGER NOT NULL, `expToLevelUp` INTEGER NOT NULL, `entry` INTEGER NOT NULL, `exp` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `idEvol` INTEGER, `lvEvol` INTEGER, `sprite` TEXT NOT NULL, `name` TEXT NOT NULL, `isShop` INTEGER NOT NULL, `type1` TEXT NOT NULL, `type2` TEXT NOT NULL, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `ActivityData` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
+            'CREATE TABLE IF NOT EXISTS `PkmnDb` (`id` INTEGER NOT NULL, `expToLevelUp` TEXT NOT NULL, `entry` INTEGER NOT NULL, `exp` INTEGER NOT NULL, `value` INTEGER NOT NULL, `level` INTEGER NOT NULL, `nameEvol` TEXT, `lvEvol` INTEGER, `sprite` TEXT NOT NULL, `name` TEXT NOT NULL, `isShop` INTEGER NOT NULL, `type1` TEXT NOT NULL, `type2` TEXT NOT NULL, `isBuyed` INTEGER NOT NULL, `totalExpAcquired` INTEGER NOT NULL, `idUpdate` INTEGER NOT NULL, FOREIGN KEY (`idUpdate`) REFERENCES `ActivityData` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`id`, `entry`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `ActivityData` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `steps` INTEGER NOT NULL, `calories` INTEGER NOT NULL, `day` INTEGER NOT NULL, `month` INTEGER NOT NULL, `year` INTEGER NOT NULL)');
 
@@ -118,13 +118,37 @@ class _$PkmnDao extends PkmnDao {
                   'exp': item.exp,
                   'value': item.value,
                   'level': item.level,
-                  'idEvol': item.idEvol,
+                  'nameEvol': item.nameEvol,
                   'lvEvol': item.lvEvol,
                   'sprite': item.sprite,
                   'name': item.name,
                   'isShop': item.isShop ? 1 : 0,
                   'type1': item.type1,
                   'type2': item.type2,
+                  'isBuyed': item.isBuyed ? 1 : 0,
+                  'totalExpAcquired': item.totalExpAcquired,
+                  'idUpdate': item.idUpdate
+                }),
+        _pkmnDbUpdateAdapter = UpdateAdapter(
+            database,
+            'PkmnDb',
+            ['id', 'entry'],
+            (PkmnDb item) => <String, Object?>{
+                  'id': item.id,
+                  'expToLevelUp': item.expToLevelUp,
+                  'entry': item.entry,
+                  'exp': item.exp,
+                  'value': item.value,
+                  'level': item.level,
+                  'nameEvol': item.nameEvol,
+                  'lvEvol': item.lvEvol,
+                  'sprite': item.sprite,
+                  'name': item.name,
+                  'isShop': item.isShop ? 1 : 0,
+                  'type1': item.type1,
+                  'type2': item.type2,
+                  'isBuyed': item.isBuyed ? 1 : 0,
+                  'totalExpAcquired': item.totalExpAcquired,
                   'idUpdate': item.idUpdate
                 }),
         _pkmnDbDeletionAdapter = DeletionAdapter(
@@ -138,13 +162,15 @@ class _$PkmnDao extends PkmnDao {
                   'exp': item.exp,
                   'value': item.value,
                   'level': item.level,
-                  'idEvol': item.idEvol,
+                  'nameEvol': item.nameEvol,
                   'lvEvol': item.lvEvol,
                   'sprite': item.sprite,
                   'name': item.name,
                   'isShop': item.isShop ? 1 : 0,
                   'type1': item.type1,
                   'type2': item.type2,
+                  'isBuyed': item.isBuyed ? 1 : 0,
+                  'totalExpAcquired': item.totalExpAcquired,
                   'idUpdate': item.idUpdate
                 });
 
@@ -156,6 +182,8 @@ class _$PkmnDao extends PkmnDao {
 
   final InsertionAdapter<PkmnDb> _pkmnDbInsertionAdapter;
 
+  final UpdateAdapter<PkmnDb> _pkmnDbUpdateAdapter;
+
   final DeletionAdapter<PkmnDb> _pkmnDbDeletionAdapter;
 
   @override
@@ -164,17 +192,20 @@ class _$PkmnDao extends PkmnDao {
         mapper: (Map<String, Object?> row) => PkmnDb(
             id: row['id'] as int,
             entry: row['entry'] as int,
-            idEvol: row['idEvol'] as int?,
+            nameEvol: row['nameEvol'] as String?,
             lvEvol: row['lvEvol'] as int?,
             idUpdate: row['idUpdate'] as int,
-            expToLevelUp: row['expToLevelUp'] as int,
+            expToLevelUp: row['expToLevelUp'] as String,
             sprite: row['sprite'] as String,
             name: row['name'] as String,
             value: row['value'] as int,
             exp: row['exp'] as int,
+            level: row['level'] as int,
+            isBuyed: (row['isBuyed'] as int) != 0,
             isShop: (row['isShop'] as int) != 0,
             type1: row['type1'] as String,
-            type2: row['type2'] as String));
+            type2: row['type2'] as String,
+            totalExpAcquired: row['totalExpAcquired'] as int));
   }
 
   @override
@@ -183,17 +214,20 @@ class _$PkmnDao extends PkmnDao {
         mapper: (Map<String, Object?> row) => PkmnDb(
             id: row['id'] as int,
             entry: row['entry'] as int,
-            idEvol: row['idEvol'] as int?,
+            nameEvol: row['nameEvol'] as String?,
             lvEvol: row['lvEvol'] as int?,
             idUpdate: row['idUpdate'] as int,
-            expToLevelUp: row['expToLevelUp'] as int,
+            expToLevelUp: row['expToLevelUp'] as String,
             sprite: row['sprite'] as String,
             name: row['name'] as String,
             value: row['value'] as int,
             exp: row['exp'] as int,
+            level: row['level'] as int,
+            isBuyed: (row['isBuyed'] as int) != 0,
             isShop: (row['isShop'] as int) != 0,
             type1: row['type1'] as String,
-            type2: row['type2'] as String));
+            type2: row['type2'] as String,
+            totalExpAcquired: row['totalExpAcquired'] as int));
   }
 
   @override
@@ -202,23 +236,20 @@ class _$PkmnDao extends PkmnDao {
         mapper: (Map<String, Object?> row) => PkmnDb(
             id: row['id'] as int,
             entry: row['entry'] as int,
-            idEvol: row['idEvol'] as int?,
+            nameEvol: row['nameEvol'] as String?,
             lvEvol: row['lvEvol'] as int?,
             idUpdate: row['idUpdate'] as int,
-            expToLevelUp: row['expToLevelUp'] as int,
+            expToLevelUp: row['expToLevelUp'] as String,
             sprite: row['sprite'] as String,
             name: row['name'] as String,
             value: row['value'] as int,
             exp: row['exp'] as int,
+            level: row['level'] as int,
+            isBuyed: (row['isBuyed'] as int) != 0,
             isShop: (row['isShop'] as int) != 0,
             type1: row['type1'] as String,
-            type2: row['type2'] as String));
-  }
-
-  @override
-  Future<List<int>?> findIdPkmnShop() async {
-    await _queryAdapter
-        .queryNoReturn('SELECT id FROM PkmnDb WHERE isShop = True');
+            type2: row['type2'] as String,
+            totalExpAcquired: row['totalExpAcquired'] as int));
   }
 
   @override
@@ -232,8 +263,23 @@ class _$PkmnDao extends PkmnDao {
   }
 
   @override
+  Future<void> updatePkmn(PkmnDb pkmn) async {
+    await _pkmnDbUpdateAdapter.update(pkmn, OnConflictStrategy.replace);
+  }
+
+  @override
+  Future<void> removePkmnFromShop(PkmnDb pkmn) async {
+    await _pkmnDbUpdateAdapter.update(pkmn, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> removePkmn(PkmnDb pkmn) async {
     await _pkmnDbDeletionAdapter.delete(pkmn);
+  }
+
+  @override
+  Future<void> removeListPkmn(List<PkmnDb> pkmn) async {
+    await _pkmnDbDeletionAdapter.deleteList(pkmn);
   }
 }
 
@@ -273,8 +319,16 @@ class _$ActivityDao extends ActivityDao {
   }
 
   @override
-  Future<int?> idxLastUpdate() async {
-    await _queryAdapter.queryNoReturn('SELECT MAX(id) FROM ActivityData');
+  Future<ActivityData?> findUpdateById(int id) async {
+    return _queryAdapter.query('SELECT * FROM ActivityData WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ActivityData(
+            row['id'] as int?,
+            row['steps'] as int,
+            row['calories'] as int,
+            row['day'] as int,
+            row['month'] as int,
+            row['year'] as int),
+        arguments: [id]);
   }
 
   @override
