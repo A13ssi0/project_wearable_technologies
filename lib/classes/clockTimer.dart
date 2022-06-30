@@ -13,13 +13,20 @@ import '../database/entities/pkmnDb.dart';
 import '../utils/manageFitBitData.dart';
 
 class Clock {
+
+  static var clock;
+
   Future<void> startTimer(BuildContext context) async {
-    Timer.periodic(
+    Clock.clock = Timer.periodic(
       const Duration(minutes: 30),
       (Timer t) async {
         await updateDatabase(context);
       },
     );
+  }
+
+  void stopClock(){
+    Clock.clock.cancel;
   }
 
   Future<int> updateDatabase(BuildContext context) async {
@@ -76,14 +83,14 @@ class Clock {
       String type2 = '';
       pkmnEv.type.length == 2 ? type2 = pkmnEv.type[1] : null;
       PkmnDb pkmnDb = PkmnDb(
-          id: pkmn.id,
+          id: pkmnEv.id,
           totalExpAcquired: pkmn.totalExpAcquired,
           level: pkmn.level,
           value: pkmn.value,
           idUpdate: idxLastUpdate,
           expToLevelUp: expToLevelUp,
-          sprite: pkmn.sprite,
-          name: pkmn.name,
+          sprite: pkmnEv.sprite,
+          name: pkmnEv.name,
           isBuyed: pkmn.isBuyed,
           type1: type1,
           type2: type2);

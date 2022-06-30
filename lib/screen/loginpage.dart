@@ -30,7 +30,7 @@ class _LoginpageState extends State<Loginpage> {
   Future<void> excuteLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getString('user') != null) {
-      Login();
+      Navigator.pushNamed(context, Homepage.routename);
     }
   }
 

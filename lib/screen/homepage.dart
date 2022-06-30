@@ -6,6 +6,7 @@ import 'package:project_wearable_technologies/repository/databaseRepository.dart
 import 'package:project_wearable_technologies/screen/gamepage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../classes/clockTimer.dart';
 import '../classes/pkmn.dart';
@@ -151,16 +152,15 @@ Future<void> startApp(BuildContext context) async {
   var rng = Random();
   List<PkmnDb>? pkmnShop = await Provider.of<DatabaseRepository>(context, listen: false).findPkmnShop();
   pkmnShop ??= [];
+  final pref = await SharedPreferences.getInstance();
+  int moneyPlus = (pref.getInt('Money')! * 0.33).toInt();
   List<int> idxChoosen = [];
   if (pkmnShop.isNotEmpty) {
     await Provider.of<DatabaseRepository>(context, listen: false).removeListPkmn(pkmnShop);
   }
-
-  List k = [1, 10, 100];
   for (var i = 0; i < 3; i++) {
-    int value = (rng.nextInt(15) + 20) * 100;
-    //int id = rng.nextInt(800);
-    int id = k[i];
+    int value = ((rng.nextInt(15) + 10) * 100) + moneyPlus;
+    int id = rng.nextInt(800);
     if (idxChoosen.contains(id)) {
       i -= 1;
     } else {
