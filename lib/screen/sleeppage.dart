@@ -1,8 +1,10 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:project_wearable_technologies/utils/textSleep.dart';
 
+import '../utils/buttonRowBar.dart';
 import '../utils/plotSleep.dart';
 import '../utils/utilsBottomNavBar.dart';
 
@@ -17,11 +19,18 @@ class Sleeppage extends StatefulWidget {
 }
 
 class _SleeppageState extends State<Sleeppage> {
+  @override
+  void initState() {
+    super.initState();
+    TextSleep.positionButtonBar = -1;
+    ButtonRowBarState.isSelected = [false, false, false];
+  }
+
   final int _currentIndex = 2;
 
   @override
   Widget build(BuildContext context) {
-    double _widthButtonBar = MediaQuery.of(context).size.width * 0.75;
+    double _widthButtonBar = MediaQuery.of(context).size.width * 0.8;
     double _heightBar = 25;
     return Scaffold(
       body: SafeArea(
@@ -31,13 +40,13 @@ class _SleeppageState extends State<Sleeppage> {
             children: [
               title(),
               SizedBox(
-                child: plotSleep(context),
+                child: plotSleep(context, refresh),
                 height: 300,
               ),
               const SizedBox(
                 height: 23,
               ),
-              TextSleep(context, heightBar: _heightBar, widthBar: _widthButtonBar)
+              TimeSeriesSleep.yesterday.isEmpty ? const SizedBox() : TextSleep(context, heightBar: _heightBar, widthBar: _widthButtonBar)
             ],
           ),
         ]),
@@ -73,5 +82,8 @@ class _SleeppageState extends State<Sleeppage> {
         ),
       ],
     );
+  }
+  refresh() {
+    setState(() {});
   }
 }

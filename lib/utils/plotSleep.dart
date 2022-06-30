@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../screen/sleeppage.dart';
 import 'manageFitBitData.dart';
 
-Widget plotSleep(BuildContext context) {
+Widget plotSleep(BuildContext context, var notifyParent) {
   return TimeSeriesSleep.yesterday.isNotEmpty
       ? chartSleep(context)
       : FutureBuilder(
@@ -16,6 +16,7 @@ Widget plotSleep(BuildContext context) {
               List<SleepPoint> sleepData = extractSleepInfo(snapshot.data as List<FitbitSleepData>);
               List<SleepPoint> cleanedSleepData = cleanSleepData(sleepData);
               TimeSeriesSleep.yesterday = cleanedSleepData;
+              notifyParent;
               return chartSleep(context);
             } else {
               return const Center(
