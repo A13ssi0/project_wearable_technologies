@@ -72,11 +72,3 @@ class Pkmn {
   }
 }
 
-
-// _____________________ PUBLIC METHODS ____________________________________________________________
-  //int calcExpLevel (int actualLevel){
-//growRate == 'fast'
-//? return 1
-  //  : return 8
-  // }
-//}

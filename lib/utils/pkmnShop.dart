@@ -74,6 +74,7 @@ Future<void> buyPkmn(BuildContext context, PkmnDb pkmn, DatabaseRepository db) a
   if (money! >= pkmn.value) {
     await db.removePkmnFromShop(pkmn);
     pref.setInt('Money', money - pkmn.value);
+    pkmnToAdd.value = 0;
     await db.addPkmn(pkmnToAdd);
     Navigator.pop(context);
   } else {
@@ -87,7 +88,7 @@ void dispError(BuildContext context) {
   });
   showDialog(
       context: context,
-      builder: (BuildContext builderContext) {
+      builder: (builderContext) {
         return const AlertDialog(
           content: Text('Not enougth money to buy it'),
         );
@@ -122,9 +123,7 @@ Widget printPkmn(BuildContext context, PkmnDb pkmn) {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(child: Image.asset(routetypes + pkmn.type1 + '.png')),
-                    pkmn.type2.isNotEmpty
-                        ? Expanded(child: Image.asset(routetypes + pkmn.type2 + '.png'))
-                        : const SizedBox()
+                    pkmn.type2.isNotEmpty ? Expanded(child: Image.asset(routetypes + pkmn.type2 + '.png')) : const SizedBox()
                   ],
                 ),
               ),

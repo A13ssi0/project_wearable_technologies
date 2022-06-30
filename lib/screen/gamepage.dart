@@ -44,7 +44,7 @@ class _GamepageState extends State<Gamepage> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         List<PkmnDb> dayCare = snapshot.data as List<PkmnDb>;
-                        return _body(dayCare);
+                        return _body(db, dayCare);
                       } else {
                         return const CircularProgressIndicator();
                       }
@@ -53,6 +53,7 @@ class _GamepageState extends State<Gamepage> {
             ),
           ),
           floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: Palette.color4,
             onPressed: () => openShop(context),
             label: const Text('Store'),
             icon: const Icon(MdiIcons.store),
@@ -70,7 +71,7 @@ class _GamepageState extends State<Gamepage> {
     );
   }
 
-  Widget _body(List<PkmnDb> dayCare) {
+  Widget _body(DatabaseRepository db, List<PkmnDb> dayCare) {
     return Column(children: [
       title(),
       Row(
@@ -82,7 +83,10 @@ class _GamepageState extends State<Gamepage> {
           )
         ],
       ),
-      plotDayCare(context, dayCare),
+      const SizedBox(
+        height: 10,
+      ),
+      plotDayCare(context, db, dayCare),
     ]);
   }
 
@@ -102,7 +106,7 @@ class _GamepageState extends State<Gamepage> {
               ),
               Text(
                 money.toString(),
-                style: const TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 8,
@@ -122,7 +126,7 @@ class _GamepageState extends State<Gamepage> {
     return list;
   }
 
-  Widget plotDayCare(BuildContext context, List<PkmnDb> dayCare) {
+  Widget plotDayCare(BuildContext context, DatabaseRepository db, List<PkmnDb> dayCare) {
     return ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
@@ -133,29 +137,172 @@ class _GamepageState extends State<Gamepage> {
             elevation: 3,
             child: ListTile(
               leading: Image.network(pkmn.sprite),
-              title: Row(
+              title: plotOnTile(pkmn),
+              onTap: () => openPkmn(context, db, pkmn),
+            ),
+          );
+        });
+  }
+
+  void openPkmn(BuildContext context, DatabaseRepository db, PkmnDb pkmn) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(child: printPkmnCard(context, db, pkmn));
+        });
+  }
+
+  Widget printPkmnCard(BuildContext context, DatabaseRepository db, PkmnDb pkmn) {
+    const routetypes = 'assets/types/';
+    return SizedBox(
+      width: 300,
+      height: 370,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(17.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '#' '${pkmn.id}   ' + pkmn.name.toUpperCase(),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Image.network(
+                pkmn.sprite,
+                scale: 0.65,
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              SizedBox(
+                height: 28,
+                child: Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(routetypes + pkmn.type1 + '.png'),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      pkmn.type2.isNotEmpty ? Image.asset(routetypes + pkmn.type2 + '.png') : const SizedBox()
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 28),
+              Column(
                 children: [
-                  Text(pkmn.name.toUpperCase().replaceAll('-', ' '), style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text('Lv.' + pkmn.level.toString()),
-                  const SizedBox(
-                    width: 2,
-                  ),
                   SizedBox(
-                      height: 3,
-                      width: 100,
+                      height: 4,
+                      width: 200,
                       child: LinearProgressIndicator(
                         value: pkmn.exp / jsonDecode(pkmn.expToLevelUp)['levels'][pkmn.level]['experience'],
                         color: const Color.fromARGB(255, 140, 243, 71),
                         backgroundColor: const Color.fromARGB(255, 107, 103, 103),
                       )),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Lv.' + pkmn.level.toString(), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Text('Exp:  ' + pkmn.exp.toString() + ' / ' + jsonDecode(pkmn.expToLevelUp)['levels'][pkmn.level]['experience'].toString(),
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: FloatingActionButton.extended(
+                      backgroundColor: Palette.color4,
+                      onPressed: () => sellPkmn(context, db, pkmn),
+                      label: Row(
+                        children: [
+                          const Text(
+                            'Sell for ',
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          const Icon(
+                            MdiIcons.currencyBtc,
+                            size: 15,
+                          ),
+                          Text(
+                            pkmn.value.toString(),
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> sellPkmn(BuildContext context, DatabaseRepository db, PkmnDb pkmn) async {
+    final pref = await SharedPreferences.getInstance();
+    int? money = pref.getInt('Money');
+    pref.setInt('Money', money! + pkmn.value);
+    await db.removePkmn(pkmn);
+    Navigator.pop(context);
+  }
+
+  Widget plotOnTile(PkmnDb pkmn) {
+    return Row(
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(pkmn.name.toUpperCase().replaceAll('-', ' '), style: const TextStyle(fontWeight: FontWeight.bold)),
+            Row(
+              children: [
+                const SizedBox(width: 10),
+                const Icon(
+                  MdiIcons.currencyBtc,
+                  size: 13,
+                  color: Colors.grey,
+                ),
+                Text(
+                  pkmn.value.toString(),
+                  style: const TextStyle(
+                    fontSize: 13.5,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
-          );
-        });
+          ],
+        ),
+        const Expanded(
+          child: SizedBox(),
+        ),
+        Text('Lv.' + pkmn.level.toString()),
+        const SizedBox(
+          width: 5,
+        ),
+        SizedBox(
+            height: 3,
+            width: 100,
+            child: LinearProgressIndicator(
+              value: pkmn.exp / jsonDecode(pkmn.expToLevelUp)['levels'][pkmn.level]['experience'],
+              color: const Color.fromARGB(255, 140, 243, 71),
+              backgroundColor: const Color.fromARGB(255, 107, 103, 103),
+            )),
+      ],
+    );
   }
 
   Widget title() {
