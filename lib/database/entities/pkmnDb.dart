@@ -10,23 +10,27 @@ import 'activityData.dart';
 ])
 class PkmnDb {
   final int id;
-  final int expToLevelUp;
+  final String expToLevelUp;
   int entry, exp, value;
-  final int level = 1;
-  final int? idEvol, lvEvol;
+  int level;
+  String? nameEvol; 
+  int? lvEvol;
   final String sprite;
-  final String name;
+  String name;
   bool isShop;
   final String type1;
   final String type2;
+  bool isBuyed;
+  int totalExpAcquired;
+  
 
   @ColumnInfo(name: 'idUpdate')
-  final int idUpdate;
+  int idUpdate;
 
   PkmnDb( 
       {required this.id,
       this.entry = 0,
-      this.idEvol,
+      this.nameEvol,
       this.lvEvol,
       required this.idUpdate,
       required this.expToLevelUp,
@@ -34,7 +38,10 @@ class PkmnDb {
       required this.name,
       this.value = 0,
       this.exp = 0,
+      this.level = 1,
+      this.isBuyed = false,
       this.isShop = false,
       required this.type1,
-      required this.type2, });
+      required this.type2,
+      this.totalExpAcquired = 0, });
 }

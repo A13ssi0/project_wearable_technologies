@@ -6,7 +6,7 @@ import 'package:project_wearable_technologies/screen/heartpage.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
 import 'package:project_wearable_technologies/screen/loginpage.dart';
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
-import 'package:project_wearable_technologies/screen/steppage.dart';
+import 'package:project_wearable_technologies/screen/dev.dart';
 
 import 'database/database.dart';
 import 'repository/databaseRepository.dart';
@@ -38,11 +38,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: Loginpage.routename,
       routes: {
-        Loginpage.routename: (context) => Loginpage(),
+        Loginpage.routename: (context) => const Loginpage(),
         Homepage.routename: (context) => const Homepage(),
         Sleeppage.routename: (context) => const Sleeppage(),
-        Steppage.routename: (context) => const Steppage(),
-        Gamepage.routename: (context) => Gamepage(),
+        DevPage.routename: (context) => const DevPage(),
+        Gamepage.routename: (context) => const Gamepage(),
         HeartPage.routename: (context) => HeartPage(),
       },
     );

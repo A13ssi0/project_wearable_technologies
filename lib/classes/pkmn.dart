@@ -1,7 +1,7 @@
 class Evolution {
   String name;
-  int? levelToEvolve;
-  Evolution({required this.name, levelToEvolve});
+  int levelToEvolve;
+  Evolution({required this.name, required this.levelToEvolve});
 }
 
 class Pkmn {
@@ -12,9 +12,9 @@ class Pkmn {
   final int value = 0;
   final int level = 1;
   final String growRate;
-  final List<Evolution> evolChain;
+  final Evolution? evolChain;
   final int exp = 0;
-  final List expToLevel;
+  final String expToLevel;
 
 // _____________________ CONSTRUCTORS ______________________________________________________________
 
@@ -27,7 +27,7 @@ class Pkmn {
     required this.evolChain,
     required this.expToLevel,
   });
-  factory Pkmn.fromJson(Map<String, dynamic> jsonPkmn, Map<String, dynamic> jsonSpec, Map<String, dynamic> jsonEvol, Map<String, dynamic> jsonLevel) {
+  factory Pkmn.fromJson(Map<String, dynamic> jsonPkmn, Map<String, dynamic> jsonSpec, Map<String, dynamic> jsonEvol, String jsonLevel) {
     return jsonEvol.isEmpty
         ? Pkmn(
             id: 0,
@@ -35,17 +35,17 @@ class Pkmn {
             sprite: '',
             type: [],
             growRate: '',
-            evolChain: [],
-            expToLevel: [],
+            evolChain: null,
+            expToLevel: '',
           )
         : Pkmn(
             id: jsonPkmn['id'],
-            name: jsonPkmn['name'],
+            name: jsonSpec['name'],
             sprite: jsonPkmn['sprites']['front_default'],
             type: _extractTypes(jsonPkmn),
             growRate: jsonSpec['growth_rate']['name'],
-            evolChain: _extractChainEvolutions(jsonEvol, jsonPkmn['name']),
-            expToLevel: jsonLevel['levels'],
+            evolChain: _addEvolution(jsonEvol, jsonPkmn['name']),
+            expToLevel: jsonLevel,
           );
   }
 
@@ -58,29 +58,20 @@ class Pkmn {
     return _type;
   }
 
-  static List<Evolution> _extractChainEvolutions(jsonEvol, name) {
-    List<Evolution> chain = [];
-    _addChainEvolutions(jsonEvol, name, chain);
-    return chain;
-  }
-
-  static void _addChainEvolutions(jsonEvol, name, chain, [bool alreadyPassed = false]) {
-    bool existNext = jsonEvol['evolves_to'].length > 0;
-    Evolution actualEv = _extractEvolution(jsonEvol, existNext);
-    alreadyPassed = actualEv.name == name;
-
-    alreadyPassed == true ? chain.add(actualEv) : null;
-    existNext == true ? _addChainEvolutions(jsonEvol['evolves_to'][0], name, chain) : null;
-  }
-
-  static Evolution _extractEvolution(jsonEvol, existNext) {
-    String _jsonName = jsonEvol['species']['name'];
-    int? _jsonLevel;
-    if (existNext) {
-      _jsonLevel = jsonEvol['evolves_to'][0]['evolution_details'][0]['min_level'];
+  static Evolution? _addEvolution(Map<String, dynamic> jsonEvol, String name) {
+    if (jsonEvol['evolves_to'].length == 0) {
+      return null;
+    } else if (jsonEvol['evolves_to'][0]['species']['name'] != name) {
+      String nameEv = jsonEvol['evolves_to'][0]['species']['name'];
+      int lvl = jsonEvol['evolves_to'][0]['evolution_details'][0]['min_level'];
+      return Evolution(name: nameEv, levelToEvolve: lvl);
+    } else {
+      Map<String, dynamic> newJsonEvol = jsonEvol['evolves_to'][0];
+      return _addEvolution(newJsonEvol, name);
     }
-    return Evolution(name: _jsonName, levelToEvolve: _jsonLevel);
   }
+}
+
 
 // _____________________ PUBLIC METHODS ____________________________________________________________
   //int calcExpLevel (int actualLevel){
@@ -88,4 +79,4 @@ class Pkmn {
 //? return 1
   //  : return 8
   // }
-}
+//}

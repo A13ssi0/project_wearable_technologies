@@ -104,6 +104,20 @@ Future<List<FitbitActivityTimeseriesData>> fetchCaloriesToday() async {
   return data;
 }
 
+// MANAGE STEPS ------------------------------------------------------------------------------------
+Future<List<FitbitActivityTimeseriesData>> fetchStepsToday() async {
+  FitbitActivityTimeseriesDataManager fitbitActivityTimeseriesDataManager =
+      FitbitActivityTimeseriesDataManager(clientID: Strings.fitbitClientID, clientSecret: Strings.fitbitClientSecret, type: 'steps');
+  FitbitActivityTimeseriesAPIURL fitbitActivityTimeseriesApiUrl = FitbitActivityTimeseriesAPIURL.dayWithResource(
+    date: DateTime.now(),
+    userID: Strings.userId,
+    resource: fitbitActivityTimeseriesDataManager.type,
+  );
+  final List<FitbitActivityTimeseriesData> data =
+    await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
+  return data;
+}
+
 // MANAGE HEART DATA -------------------------------------------------------------------------------
 Future<List<FitbitHeartData>> fetchHeartData() async {
   FitbitHeartDataManager fitbitHeartDataManager = FitbitHeartDataManager(

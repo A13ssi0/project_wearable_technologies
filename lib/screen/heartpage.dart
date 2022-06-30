@@ -2,12 +2,13 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 
 import '../utils/manageFitBitData.dart';
 import '../utils/utilsBottomNavBar.dart';
 
 class HeartPage extends StatefulWidget {
-  //const HeartPage({Key? key}) : super(key: key);
+  const HeartPage({Key? key}) : super(key: key);
 
   static const route = '/';
   static const routename = 'heart';
@@ -18,21 +19,13 @@ class HeartPage extends StatefulWidget {
 
 class _HeartPageState extends State<HeartPage> {
   final int _currentIndex = 1;
-  late PageController _pageController;
 
   var heartdata = [];
   var heartdatamonth = [];
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     loading();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   Future<void> loading() async {
@@ -47,166 +40,86 @@ class _HeartPageState extends State<HeartPage> {
     }
   }
 
-  double mediaweek() {
+  String mediaweek() {
     double somma = 0;
-    double meanweek = 0;
     for (var i = 0; i < heartdata.length; i++) {
       if (heartdata[i].caloriesFatBurn != null) {
         somma = somma + heartdata[i].caloriesFatBurn;
       }
     }
-    meanweek = somma / heartdata.length;
-    return meanweek;
+    return (somma / heartdata.length).toStringAsFixed(2);
   }
 
-  double mediamonth() {
+  String mediamonth() {
     double somma = 0;
-    double meanmonth = 0;
     for (var i = 0; i < heartdatamonth.length; i++) {
       if (heartdatamonth[i].caloriesFatBurn != null) {
         somma = somma + heartdatamonth[i].caloriesFatBurn;
       }
     }
-    meanmonth = somma / heartdatamonth.length;
-    return meanmonth;
+    return (somma / heartdatamonth.length).toStringAsFixed(2);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-
-        child: PageView(
-          controller: _pageController,
-          children: [
-            ListView(children: [
-              Column(
+        child: ListView(children: [
+          Column(
+            children: [
+              title(),
+              (heartdata.isEmpty)
+                  ? Image.asset(
+                      'assets/jigglypuff.gif',
+                      height: MediaQuery.of(context).size.width,
+                      width: MediaQuery.of(context).size.width,
+                    )
+                  : plotHeart(context, heartdata),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  title(),
-                  (heartdata.isEmpty) ? Image.asset(
-                    'assets/jigglypuff.gif',
-                    height:MediaQuery.of(context).size.width,
-                    width: MediaQuery.of(context).size.width,
-                  ) : plotHearth(context, heartdata),
-                  Container(
-                      margin: const EdgeInsets.fromLTRB(12, 12, 0, 32),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    child: const Text(''),
-                                    color: Colors.pinkAccent,
-                                    padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    child: const Text('caloriesFatBurn'),
-                                    padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                                flex: 10,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    child: const Text(''),
-                                    color: Colors.lightBlueAccent,
-                                    padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    child: const Text('caloriesPeak'),
-                                    padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                                flex: 10,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    child: const Text(''),
-                                    color: Colors.deepOrangeAccent,
-                                    padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    child: const Text('caloriesCardio'),
-                                    padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                                flex: 10,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    child: const Text(''),
-                                    color: Colors.white,
-                                    padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    child:
-                                        Text('MeanWeekCaloriesFatBurn: ' + mediaweek().toString()),
-                                    padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                                flex: 10,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                    child: const Text(''),
-                                    color: Colors.white,
-                                    padding: const EdgeInsets.fromLTRB(6, 0, 0, 0)),
-                                flex: 1,
-                              ),
-                              Expanded(
-                                child: Container(
-                                    child: Text(
-                                        'MeanMonthCaloriesFatBurn: ' + mediamonth().toString()),
-                                    padding: const EdgeInsets.fromLTRB(6, 2, 0, 2)),
-                                flex: 10,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ))
+                  Row(
+                    children: [
+                      Container(width: 15, child: const Text(''), color: Colors.pinkAccent),
+                      Container(child: const Text('caloriesFatBurn'), padding: const EdgeInsets.fromLTRB(3, 0, 0, 0)),
+                    ],
+                  ),
+                  const SizedBox(width: 20),
+                  Row(
+                    children: [
+                      Container(width: 15, child: const Text(''), color: Colors.deepOrangeAccent),
+                      Container(child: const Text('caloriesCardio'), padding: const EdgeInsets.fromLTRB(3, 0, 0, 0)),
+                    ],
+                  ),
+                  const SizedBox(width: 20),
+                  Row(
+                    children: [
+                      Container(width: 15, child: const Text(''), color: Colors.lightBlueAccent),
+                      Container(child: const Text('caloriesPeak'), padding: const EdgeInsets.fromLTRB(3, 0, 0, 0)),
+                    ],
+                  ),
                 ],
               ),
-            ]),
-          ],
-
-        ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text('MeanWeekCaloriesFatBurn: ' + mediaweek(), style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
+              Text('MeanMonthCaloriesFatBurn: ' + mediamonth(), style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
+            ],
+          ),
+        ]),
       ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         showElevation: false,
         onItemSelected: (index) => {
-          //_currentIndex = index;
-          _pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 1), curve: Curves.easeIn),
           changePage(context, index),
         },
         items: listBottomNavyBarItem,
       ),
-      floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.cached),
-          onPressed: () {
-            setState(() {
-              heartdata = [];
-            });
-            loading();
-          }),
     );
   }
 
@@ -218,13 +131,11 @@ class _HeartPageState extends State<HeartPage> {
           height: 25,
         ),
         Row(
-          children: const [
-            SizedBox(
+          children: [
+            const SizedBox(
               width: 30,
             ),
-            Text('Heart',
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 40, color: Colors.blue, fontFamily: 'Lobster')),
+            Text('Heart', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color2, fontFamily: 'Lobster')),
           ],
         ),
         const SizedBox(
@@ -235,13 +146,14 @@ class _HeartPageState extends State<HeartPage> {
   }
 } //Page
 
-Widget plotHearth(BuildContext context, List heartdata) {
+Widget plotHeart(BuildContext context, List heartdata) {
   return Container(
     margin: const EdgeInsets.fromLTRB(0, 12, 8, 0),
     width: MediaQuery.of(context).size.width * 90 / 100,
     height: 400,
     child: BarChart(
       BarChartData(
+        gridData: FlGridData(drawVerticalLine: false),
         titlesData: FlTitlesData(
             show: true,
             bottomTitles: AxisTitles(
@@ -260,23 +172,18 @@ Widget plotHearth(BuildContext context, List heartdata) {
         barGroups: [
           for (var i = 0; i < heartdata.length; i++)
             BarChartGroupData(
-              x: i, //
+              x: i,
               barsSpace: 2,
               barRods: [
-                //BarChartRodData(
-                // toY: getvalue(i,1),
-                //color: Colors.lightGreen,
-
-                //),
                 BarChartRodData(
                   toY: getvalue(i, 2, heartdata),
                   color: Colors.pinkAccent,
                 ),
+                BarChartRodData(toY: getvalue(i, 4, heartdata), color: Colors.deepOrangeAccent),
                 BarChartRodData(
                   toY: getvalue(i, 3, heartdata),
                   color: Colors.lightBlueAccent,
                 ),
-                BarChartRodData(toY: getvalue(i, 4, heartdata), color: Colors.deepOrangeAccent),
               ],
             ),
         ],

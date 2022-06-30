@@ -1,5 +1,6 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:project_wearable_technologies/utils/textSleep.dart';
 
 import '../utils/plotSleep.dart';
@@ -17,19 +18,6 @@ class Sleeppage extends StatefulWidget {
 
 class _SleeppageState extends State<Sleeppage> {
   final int _currentIndex = 2;
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,32 +25,24 @@ class _SleeppageState extends State<Sleeppage> {
     double _heightBar = 25;
     return Scaffold(
       body: SafeArea(
-        child: PageView(
-          controller: _pageController,
-          children: [
-            ListView(children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  title(),
-                  plotSleep(context),
-                  const SizedBox(
-                    height: 23,
-                  ),
-                  TextSleep(context, heightBar: _heightBar, widthBar: _widthButtonBar)
-                ],
+        child: ListView(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              title(),
+              plotSleep(context),
+              const SizedBox(
+                height: 23,
               ),
-            ]),
-          ],
-        ),
+              TextSleep(context, heightBar: _heightBar, widthBar: _widthButtonBar)
+            ],
+          ),
+        ]),
       ),
       bottomNavigationBar: BottomNavyBar(
         selectedIndex: _currentIndex,
         showElevation: false,
         onItemSelected: (index) => {
-          //_currentIndex = index;
-          _pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 1), curve: Curves.ease),
           changePage(context, index),
         },
         items: listBottomNavyBarItem,
@@ -78,13 +58,11 @@ class _SleeppageState extends State<Sleeppage> {
           height: 25,
         ),
         Row(
-          children: const [
-            SizedBox(
+          children:  [
+            const SizedBox(
               width: 30,
             ),
-            Text('Sleep',
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 40, color: Colors.blue, fontFamily: 'Lobster')),
+            Text('Sleep', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color3, fontFamily: 'Lobster')),
           ],
         ),
         const SizedBox(
