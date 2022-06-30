@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/utils/textCalories.dart';
 
 import 'package:project_wearable_technologies/utils/textSleep.dart';
 
@@ -6,22 +7,24 @@ class ButtonRowBar extends StatefulWidget {
   final double height;
   final double width;
   final Color color;
+  String text;
   final Function() notifyParent;
 
-  const ButtonRowBar({
+  ButtonRowBar({
     Key? key,
     required this.height,
     required this.width,
     required this.notifyParent,
     required this.color,
+    required this.text,
   }) : super(key: key);
 
   @override
-  State<ButtonRowBar> createState() => _ButtonRowBarState();
+  State<ButtonRowBar> createState() => ButtonRowBarState();
 }
 
-class _ButtonRowBarState extends State<ButtonRowBar> {
-  static final List<bool> _isSelected = [false, false, false];
+class ButtonRowBarState extends State<ButtonRowBar> {
+  static List<bool> isSelected = [false, false, false];
   final Color _backSelectColor = Colors.white;
 
   @override
@@ -93,20 +96,27 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
 
   Color _choosenColor(Color _retroColor, {required int idxButton, bool isText = false}) {
     return isText
-        ? _isSelected[idxButton]
+        ? isSelected[idxButton]
             ? _retroColor
             : _backSelectColor
-        : _isSelected[idxButton]
+        : isSelected[idxButton]
             ? _backSelectColor
             : _retroColor;
   }
 
   void _changeSelected(int nextSelect) {
     setState(() {
-      TextSleep.positionButtonBar >= 0 ? _isSelected[TextSleep.positionButtonBar] = false : null;
-      _isSelected[nextSelect] = true;
-      TextSleep.positionButtonBar = nextSelect;
-      widget.notifyParent();
+      if (widget.text == 'sleep') {
+        TextSleep.positionButtonBar >= 0 ? isSelected[TextSleep.positionButtonBar] = false : null;
+        isSelected[nextSelect] = true;
+        TextSleep.positionButtonBar = nextSelect;
+        widget.notifyParent();
+      } else if (widget.text == 'calories') {
+        TextCalories.positionButtonBar >= 0 ? isSelected[TextCalories.positionButtonBar] = false : null;
+        isSelected[nextSelect] = true;
+        TextCalories.positionButtonBar = nextSelect;
+        widget.notifyParent();
+      }
     });
   }
 }

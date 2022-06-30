@@ -3,7 +3,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
+import 'package:project_wearable_technologies/utils/textCalories.dart';
 
+import '../utils/buttonRowBar.dart';
 import '../utils/manageFitBitData.dart';
 import '../utils/utilsBottomNavBar.dart';
 
@@ -25,6 +27,10 @@ class _HeartPageState extends State<HeartPage> {
   @override
   void initState() {
     super.initState();
+
+    TextCalories.positionButtonBar = -1;
+    ButtonRowBarState.isSelected = [false, false, false];
+
     loading();
   }
 
@@ -39,28 +45,10 @@ class _HeartPageState extends State<HeartPage> {
     }
   }
 
-  String mediaweek() {
-    double somma = 0;
-    for (var i = 0; i < heartdata.length; i++) {
-      if (heartdata[i].caloriesFatBurn != null) {
-        somma = somma + heartdata[i].caloriesFatBurn;
-      }
-    }
-    return (somma / heartdata.length).toStringAsFixed(2);
-  }
-
-  String mediamonth() {
-    double somma = 0;
-    for (var i = 0; i < heartdatamonth.length; i++) {
-      if (heartdatamonth[i].caloriesFatBurn != null) {
-        somma = somma + heartdatamonth[i].caloriesFatBurn;
-      }
-    }
-    return (somma / heartdatamonth.length).toStringAsFixed(2);
-  }
-
   @override
   Widget build(BuildContext context) {
+    double _widthButtonBar = MediaQuery.of(context).size.width * 0.8;
+    double _heightBar = 25;
     return Scaffold(
       body: SafeArea(
         child: ListView(children: [
@@ -113,8 +101,9 @@ class _HeartPageState extends State<HeartPage> {
               const SizedBox(
                 height: 20,
               ),
-              Text('MeanWeekCaloriesFatBurn: ' + mediaweek(), style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
-              Text('MeanMonthCaloriesFatBurn: ' + mediamonth(), style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
+              heartdata.isEmpty
+              ? const SizedBox()
+              : TextCalories(context, heartdata: heartdata, heartdatamonth: heartdatamonth, heightBar: _heightBar, widthBar: _widthButtonBar)
             ],
           ),
         ]),

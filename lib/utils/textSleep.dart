@@ -21,7 +21,7 @@ class _TextSleepState extends State<TextSleep> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ButtonRowBar(color: Palette.color3, height: widget.heightBar, width: widget.widthBar, notifyParent: refresh),
+        ButtonRowBar(text: 'sleep', color: Palette.color3, height: widget.heightBar, width: widget.widthBar, notifyParent: refresh),
         const SizedBox(
           height: 15,
         ),
@@ -75,7 +75,14 @@ class _TextSleepState extends State<TextSleep> {
                   } else {
                     return const SizedBox(
                       height: 60.0,
-                      child: Center(child: CircularProgressIndicator()),
+                      child: Center(
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/jigglypuff.gif',
+                          ),
+                          radius: 40,
+                        ),
+                      ),
                     );
                   }
                 })
@@ -93,7 +100,14 @@ class _TextSleepState extends State<TextSleep> {
                       } else {
                         return const SizedBox(
                           height: 60.0,
-                          child: Center(child: CircularProgressIndicator()),
+                          child: Center(
+                            child: CircleAvatar(
+                              backgroundImage: AssetImage(
+                                'assets/jigglypuff.gif',
+                              ),
+                              radius: 40,
+                            ),
+                          ),
                         );
                       }
                     })
