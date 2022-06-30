@@ -1,6 +1,7 @@
 
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
 
 import '../classes/clockTimer.dart';
@@ -30,11 +31,18 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              _bodyHomepage(context),
-            ],
+          child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage('assets/pokemon.jpg')
+                ),
+              ) ,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                _bodyHomepage(context),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomNavyBar(
@@ -54,14 +62,14 @@ Widget title() {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const SizedBox(
-        height: 25,
+        height: 20,
       ),
       Row(
         children: [
           const SizedBox(
-            width: 30,
+            width: 20,
           ),
-          Text('Homepage', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color1, fontFamily: 'Lobster')),
+          Text('      Welcome Back  ', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color1, fontFamily: 'Lobster')),
         ],
       ),
     ],
@@ -73,10 +81,11 @@ Widget _bodyHomepage(BuildContext context) {
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       title(),
-      
+
       ElevatedButton(
+
         style: ElevatedButton.styleFrom(
-          primary: Colors.deepOrangeAccent,
+          primary: Palette.color4,
         ),
         onPressed: () {
           Navigator.pushNamed(context, HeartPage.routename);
@@ -87,10 +96,11 @@ Widget _bodyHomepage(BuildContext context) {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
               Text(
-                'Heart',
+                'Calories',
                 style: TextStyle(fontSize: 20),
               ),
               Icon(
+
                 Icons.favorite,
                 size: 18,
               ),
@@ -98,14 +108,38 @@ Widget _bodyHomepage(BuildContext context) {
           ),
         ),
       ),
-      const SizedBox(
-        height: 50,
+      ElevatedButton(
+
+        style: ElevatedButton.styleFrom(
+          primary: Palette.color3,
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, Sleeppage.routename);
+        },
+
+        child: SizedBox(
+          width: 100,
+          child: Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              Text(
+                'Sleep',
+                style: TextStyle(fontSize: 20),
+              ),
+              Icon(
+                Icons.bedtime,
+                size: 18,
+              ),
+            ],
+          ),
+        ),
       ),
       const Padding(
         padding: EdgeInsets.all(10),
         child: Card(
           child: SizedBox(
-            height: 300,
+            height: 500,
             //child: plotSleep(context),
           ),
         ),
@@ -114,8 +148,7 @@ Widget _bodyHomepage(BuildContext context) {
         padding: EdgeInsets.all(10),
         child: Card(
           child: SizedBox(
-            height: 300,
-            //child: plotHearth(BuildContext context, List heartdata),
+            height: 500,
           ),
         ),
       ),
