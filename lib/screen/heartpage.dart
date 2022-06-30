@@ -106,8 +106,8 @@ class _HeartPageState extends State<HeartPage> {
               const SizedBox(
                 height: 20,
               ),
-              Text('MeanWeekCaloriesFatBurn: ' + mediaweek(), style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
-              Text('MeanMonthCaloriesFatBurn: ' + mediamonth(), style: const TextStyle(fontSize: 18), textAlign: TextAlign.center),
+              Text('MeanWeekCaloriesFatBurn: ' + mediaweek(), style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
+              Text('MeanMonthCaloriesFatBurn: ' + mediamonth(), style: const TextStyle(fontSize: 20), textAlign: TextAlign.center),
             ],
           ),
         ]),
@@ -135,7 +135,7 @@ class _HeartPageState extends State<HeartPage> {
             const SizedBox(
               width: 30,
             ),
-            Text('Heart', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color2, fontFamily: 'Lobster')),
+            Text('Heart', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
           ],
         ),
         const SizedBox(

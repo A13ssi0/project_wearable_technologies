@@ -170,7 +170,7 @@ class _GamepageState extends State<Gamepage> {
             const SizedBox(
               width: 30,
             ),
-            Text('Daycare', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
+            Text('Daycare', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color2, fontFamily: 'Lobster')),
           ],
         ),
       ],

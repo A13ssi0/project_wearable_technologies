@@ -15,10 +15,10 @@ List<BottomNavyBarItem> listBottomNavyBarItem = [
     title: const Text('Home'),
     activeColor: Palette.color1,
   ),
-  BottomNavyBarItem(icon: const Icon(Icons.favorite_border_sharp), title: const Text('Heart'), activeColor: Palette.color2),
+  BottomNavyBarItem(icon: const Icon(Icons.favorite_border_sharp), title: const Text('Heart'), activeColor: Palette.color4),
   BottomNavyBarItem(icon: const Icon(Icons.bedtime), title: const Text('Sleep'), activeColor: Palette.color3),
-  BottomNavyBarItem(icon: const Icon(MdiIcons.pokeball), title: const Text('DayCare'), activeColor: Palette.color4),
-  BottomNavyBarItem(icon: const Icon(MdiIcons.account), title: const Text('Settings'), activeColor: Palette.color5),
+  BottomNavyBarItem(icon: const Icon(MdiIcons.pokeball), title: const Text('DayCare'), activeColor: Palette.color2),
+  BottomNavyBarItem(icon: const Icon(MdiIcons.logout), title: const Text('Settings'), activeColor: Palette.color5),
 ];
 
 void changePage(BuildContext context, idx) {
