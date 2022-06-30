@@ -56,13 +56,13 @@ class _LoginpageState extends State<Loginpage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Palette.color4,
+      backgroundColor: Palette.color2,
       body: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 0.75,
           height: 500,
           decoration: BoxDecoration(
-              color: Palette.color2,
+              color: Palette.color3,
               border: Border.all(
                 width: 0,
                 color: Colors.amberAccent,
@@ -71,19 +71,16 @@ class _LoginpageState extends State<Loginpage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              title(),
               Container(
                 margin: const EdgeInsets.fromLTRB(0, 13, 0, 0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/Jigglypuff2.jpg',
+                    'assets/Jigglypuffwe.gif',
                     width: MediaQuery.of(context).size.width * 0.65,
                   ),
                 ),
-              ),
-              const Text(
-                'Bentornato',
-                style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -92,7 +89,8 @@ class _LoginpageState extends State<Loginpage> {
                     height: 50,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
-                      child: TextField(
+                      child: TextField(//colore tasto login
+                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         controller: Usernamecontroller,
                         decoration: const InputDecoration(
                             border: OutlineInputBorder(),
@@ -107,6 +105,7 @@ class _LoginpageState extends State<Loginpage> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
                       child: TextField(
+                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                         controller: Passwordcontroller,
                         obscureText: true,
                         decoration: const InputDecoration(
@@ -130,7 +129,7 @@ class _LoginpageState extends State<Loginpage> {
                     margin: const EdgeInsets.fromLTRB(12, 12, 12, 2),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          primary: Palette.color5,
+                          primary: Palette.color1,
                         ),
                         onPressed: () async {
                           if (Usernamecontroller.text != Strings.LoginUserName ||
@@ -148,8 +147,10 @@ class _LoginpageState extends State<Loginpage> {
                           Login();
 
                           return;
+
                         },
-                        // Obtain shared preferences.
+
+
                         child: const Text('Login')),
                   ),
                 ],
@@ -161,7 +162,30 @@ class _LoginpageState extends State<Loginpage> {
       ),
     );
   }
-}
+  Widget title() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(
+          height: 25,
+        ),
+        Row(
+          children: [
+            const SizedBox(
+              width: 30,
+            ),
+            Text('Welcome', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
+          ],
+        ),
+        const SizedBox(
+          height: 23,
+        ),
+      ],
+    );
+  }
+} //Page
+
+
 
   //build
 
