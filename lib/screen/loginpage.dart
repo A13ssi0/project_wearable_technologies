@@ -1,7 +1,7 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_wearable_technologies/screen/homepage.dart';
+import 'package:project_wearable_technologies/screen/loadingPage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
 import 'package:project_wearable_technologies/utils/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,11 +30,21 @@ class _LoginpageState extends State<Loginpage> {
   Future<void> excuteLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getString('user') != null) {
-      Navigator.pushNamed(context, Homepage.routename);
+      final prefs = await SharedPreferences.getInstance();
+      String? userId = await FitbitConnector.authorize(
+          context: context,
+          clientID: Strings.fitbitClientID,
+          clientSecret: Strings.fitbitClientSecret,
+          redirectUri: Strings.fitbitRedirectUri,
+          callbackUrlScheme: Strings.fitbitCallbackScheme);
+
+      Strings.writeUserId(userId!);
+      prefs.setString('user', userId);
+      Navigator.pushNamed(context, LoadingPage.routename);
     }
   }
 
-  Future<void> Login() async {
+  Future<void> login() async {
     final prefs = await SharedPreferences.getInstance();
     String? userId = await FitbitConnector.authorize(
         context: context,
@@ -48,120 +58,120 @@ class _LoginpageState extends State<Loginpage> {
     prefs.setString('UserName', Usernamecontroller.text);
     prefs.setString('Password', Passwordcontroller.text);
     prefs.setInt('Money', 5000);
-    prefs.setString('DayLogin', DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    prefs.setString('LastDay', DateFormat('yyyy-MM-dd').format(DateTime.now()));
+    prefs.setBool('isFirstRun', true);
 
-    Navigator.pushNamed(context, Homepage.routename);
+    Navigator.pushNamed(context, LoadingPage.routename);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Palette.color2,
       body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.75,
-          height: 500,
-          decoration: BoxDecoration(
-              color: Palette.color3,
-              border: Border.all(
-                width: 0,
-                color: Colors.amberAccent,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(50))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              title(),
-              Container(
-                margin: const EdgeInsets.fromLTRB(0, 13, 0, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'assets/Jigglypuffwe.gif',
-                    width: MediaQuery.of(context).size.width * 0.65,
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.75,
+            height: 550,
+            decoration: BoxDecoration(
+                color: Palette.color3,
+                border: Border.all(
+                  width: 0,
+                  color: Colors.amberAccent,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(50))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                title(),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 13, 0, 0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'assets/Jigglypuffwe.gif',
+                      width: MediaQuery.of(context).size.width * 0.65,
+                    ),
                   ),
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
-                      child: TextField(//colore tasto login
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                        controller: Usernamecontroller,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'UserName',
-                            hintText: 'Enter UserName',
-                            contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
-                      child: TextField(
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-                        controller: Passwordcontroller,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Password',
-                            hintText: 'Password',
-                            contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
-                      ),
-                    ),
-                  ),
-                  Text(
-                    error,
-                    style: const TextStyle(color: Colors.red),
-                  )
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(12, 12, 12, 2),
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          primary: Palette.color1,
+                const SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
+                        child: TextField(
+                          style: TextStyle(color: Palette.color1, fontSize: 16, fontWeight: FontWeight.bold),
+                          controller: Usernamecontroller,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'UserName',
+                              hintText: 'Enter UserName',
+                              contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
                         ),
-                        onPressed: () async {
-                          if (Usernamecontroller.text != Strings.LoginUserName ||
-                              Passwordcontroller.text != Strings.LoginPassword) {
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(32, 0, 32, 12),
+                        child: TextField(
+                          style: TextStyle(color: Palette.color1, fontSize: 16, fontWeight: FontWeight.bold),
+                          controller: Passwordcontroller,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Password',
+                              hintText: 'Password',
+                              contentPadding: EdgeInsets.fromLTRB(12, 6, 8, 0)),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      error,
+                      style: const TextStyle(color: Colors.red),
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(12, 12, 12, 2),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Palette.color1,
+                          ),
+                          onPressed: () async {
+                            if (Usernamecontroller.text != Strings.LoginUserName || Passwordcontroller.text != Strings.LoginPassword) {
+                              setState(() {
+                                error = 'The username or password is incorrect.';
+                              });
+                              return;
+                            }
                             setState(() {
-                              error = 'Attenzione uno dei campi è errato';
+                              error = '';
                             });
-
+                            login();
                             return;
-                          }
-                          setState(() {
-                            error = '';
-                          });
-                          // Obtain shared preferences.
-                          Login();
-
-                          return;
-
-                        },
-
-
-                        child: const Text('Login')),
-                  ),
-                ],
-              ),
-              
-            ],
+                          },
+                          child: const Text('Login')),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
   Widget title() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,19 +184,10 @@ class _LoginpageState extends State<Loginpage> {
             const SizedBox(
               width: 30,
             ),
-            Text('Welcome', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
+            Text('Welcome', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color1, fontFamily: 'Lobster')),
           ],
-        ),
-        const SizedBox(
-          height: 23,
         ),
       ],
     );
   }
-} //Page
-
-
-
-  //build
-
-//Page
+}

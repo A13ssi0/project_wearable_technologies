@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:project_wearable_technologies/utils/buttonRowBar.dart';
 import 'package:project_wearable_technologies/utils/manageFitBitData.dart';
+import 'package:project_wearable_technologies/utils/palette.dart';
 
 class TextSleep extends StatefulWidget {
   final double heightBar;
@@ -20,7 +21,7 @@ class _TextSleepState extends State<TextSleep> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ButtonRowBar(height: widget.heightBar, width: widget.widthBar, notifyParent: refresh),
+        ButtonRowBar(color: Palette.color3, height: widget.heightBar, width: widget.widthBar, notifyParent: refresh),
         const SizedBox(
           height: 15,
         ),

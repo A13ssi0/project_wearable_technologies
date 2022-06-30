@@ -13,7 +13,6 @@ import '../database/entities/pkmnDb.dart';
 import '../utils/manageFitBitData.dart';
 
 class Clock {
-
   static var clock;
 
   Future<void> startTimer(BuildContext context) async {
@@ -25,7 +24,7 @@ class Clock {
     );
   }
 
-  void stopClock(){
+  void stopClock() {
     Clock.clock.cancel;
   }
 
@@ -76,7 +75,7 @@ class Clock {
     pkmn.level = pkmn.level + 1;
     pkmn.exp = 0;
 
-    if (pkmn.level >= (pkmn.lvEvol)!.toInt() && pkmn.nameEvol != null) {
+    if (pkmn.nameEvol != null && pkmn.lvEvol != null && pkmn.level >= (pkmn.lvEvol)!.toInt()) {
       Pkmn? pkmnEv = await fetchPkmn(pkmn.nameEvol!);
       String expToLevelUp = pkmnEv!.expToLevel;
       String type1 = pkmnEv.type[0];

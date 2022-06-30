@@ -31,7 +31,6 @@ class _HeartPageState extends State<HeartPage> {
   Future<void> loading() async {
     var data = await fetchHeartDataSettimana();
     var dato = await fetchHeartDataMese();
-    print(data[6]);
     if (heartdata.isEmpty) {
       setState(() {
         heartdata = data;
@@ -68,13 +67,21 @@ class _HeartPageState extends State<HeartPage> {
           Column(
             children: [
               title(),
-              (heartdata.isEmpty)
-                  ? Image.asset(
-                      'assets/jigglypuff.gif',
-                      height: MediaQuery.of(context).size.width,
-                      width: MediaQuery.of(context).size.width,
-                    )
-                  : plotHeart(context, heartdata),
+              Container(
+                margin: const EdgeInsets.fromLTRB(0, 12, 8, 0),
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 400,
+                child: (heartdata.isEmpty)
+                    ? const Padding(
+                        padding: EdgeInsets.all(100),
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage(
+                            'assets/jigglypuff.gif',
+                          ),
+                        ),
+                      )
+                    : plotHeart(context, heartdata),
+              ),
               const SizedBox(
                 height: 10,
               ),
@@ -135,7 +142,7 @@ class _HeartPageState extends State<HeartPage> {
             const SizedBox(
               width: 30,
             ),
-            Text('Heart', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
+            Text('Calories', textAlign: TextAlign.start, style: TextStyle(fontSize: 40, color: Palette.color4, fontFamily: 'Lobster')),
           ],
         ),
         const SizedBox(
@@ -144,72 +151,62 @@ class _HeartPageState extends State<HeartPage> {
       ],
     );
   }
-} //Page
+}
 
 Widget plotHeart(BuildContext context, List heartdata) {
-  return Container(
-    margin: const EdgeInsets.fromLTRB(0, 12, 8, 0),
-    width: MediaQuery.of(context).size.width * 90 / 100,
-    height: 400,
-    child: BarChart(
-      BarChartData(
-        gridData: FlGridData(drawVerticalLine: false),
-        titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: bottomTitles,
-                reservedSize: 42,
+  return BarChart(
+    BarChartData(
+      gridData: FlGridData(drawVerticalLine: false),
+      titlesData: FlTitlesData(
+          show: true,
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: bottomTitles,
+              reservedSize: 42,
+            ),
+          ),
+          topTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          )),
+      barGroups: [
+        for (var i = 0; i < heartdata.length; i++)
+          BarChartGroupData(
+            x: i,
+            barsSpace: 2,
+            barRods: [
+              BarChartRodData(
+                toY: getvalue(i, 2, heartdata),
+                color: Colors.pinkAccent,
               ),
-            ),
-            topTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            ),
-            rightTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: false),
-            )),
-        barGroups: [
-          for (var i = 0; i < heartdata.length; i++)
-            BarChartGroupData(
-              x: i,
-              barsSpace: 2,
-              barRods: [
-                BarChartRodData(
-                  toY: getvalue(i, 2, heartdata),
-                  color: Colors.pinkAccent,
-                ),
-                BarChartRodData(toY: getvalue(i, 4, heartdata), color: Colors.deepOrangeAccent),
-                BarChartRodData(
-                  toY: getvalue(i, 3, heartdata),
-                  color: Colors.lightBlueAccent,
-                ),
-              ],
-            ),
-        ],
-      ),
+              BarChartRodData(toY: getvalue(i, 4, heartdata), color: Colors.deepOrangeAccent),
+              BarChartRodData(
+                toY: getvalue(i, 3, heartdata),
+                color: Colors.lightBlueAccent,
+              ),
+            ],
+          ),
+      ],
     ),
   );
 }
 
-double getvalue(int index, int Id, List heartdata) {
-  if (Id == 1) {
-    return heartdata[index].restingHeartRate.toDouble();
-  }
-  if (Id == 2) {
+double getvalue(int index, int id, List heartdata) {
+  if (id == 2) {
     return heartdata[index].caloriesFatBurn;
   }
-  if (Id == 3) {
+  if (id == 3) {
     return heartdata[index].caloriesPeak;
   }
-  if (Id == 4) {
+  if (id == 4) {
     return heartdata[index].caloriesCardio;
   }
   return 0;
 }
 
-//);
-//}
 Widget bottomTitles(double value, TitleMeta meta) {
   List<String> titles = [
     DateFormat('EEEE').format(DateTime.now().subtract(const Duration(days: 6))).substring(0, 2),
@@ -232,7 +229,7 @@ Widget bottomTitles(double value, TitleMeta meta) {
 
   return SideTitleWidget(
     axisSide: meta.axisSide,
-    space: 16, //margin top
+    space: 16,
     child: text,
   );
 }

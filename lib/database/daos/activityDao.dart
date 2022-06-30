@@ -3,10 +3,9 @@ import 'package:project_wearable_technologies/database/entities/activityData.dar
 
 @dao
 abstract class ActivityDao {
-
   @Query('SELECT * FROM ActivityData')
   Future<List<ActivityData>?> findAllUpdates();
-  
+
   @Query('SELECT * FROM ActivityData WHERE id = :id')
   Future<ActivityData?> findUpdateById(int id);
 
@@ -15,5 +14,4 @@ abstract class ActivityDao {
 
   @Query('DELETE FROM ActivityData')
   Future<void> clearActivity();
-
 }

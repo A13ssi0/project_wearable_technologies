@@ -1,12 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:project_wearable_technologies/utils/palette.dart';
 
 import 'package:project_wearable_technologies/utils/textSleep.dart';
 
 class ButtonRowBar extends StatefulWidget {
   final double height;
   final double width;
+  final Color color;
   final Function() notifyParent;
 
   const ButtonRowBar({
@@ -14,6 +13,7 @@ class ButtonRowBar extends StatefulWidget {
     required this.height,
     required this.width,
     required this.notifyParent,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -22,11 +22,11 @@ class ButtonRowBar extends StatefulWidget {
 
 class _ButtonRowBarState extends State<ButtonRowBar> {
   static final List<bool> _isSelected = [false, false, false];
-  final Color _retroColor = Palette.color3;
   final Color _backSelectColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
+    final Color _retroColor = widget.color;
     final double _totalHeight = widget.height;
     final double _totalWidth = widget.width;
     double _heightText = _totalHeight * 0.5;
@@ -48,11 +48,11 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: _choosenColor(idxButton: 0),
+                            color: _choosenColor(_retroColor, idxButton: 0),
                             borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), topLeft: Radius.circular(12))),
                         child: Text("Daily",
                             style: TextStyle(
-                              color: _choosenColor(idxButton: 0, isText: true),
+                              color: _choosenColor(_retroColor, idxButton: 0, isText: true),
                               fontSize: _heightText,
                             )),
                       ))),
@@ -63,11 +63,11 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: _choosenColor(idxButton: 1),
+                          color: _choosenColor(_retroColor, idxButton: 1),
                         ),
                         child: Text("Weekly",
                             style: TextStyle(
-                              color: _choosenColor(idxButton: 1, isText: true),
+                              color: _choosenColor(_retroColor, idxButton: 1, isText: true),
                               fontSize: _heightText,
                             )),
                       ))),
@@ -78,11 +78,11 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: _choosenColor(idxButton: 2),
+                            color: _choosenColor(_retroColor, idxButton: 2),
                             borderRadius: const BorderRadius.only(bottomRight: Radius.circular(12), topRight: Radius.circular(12))),
                         child: Text("Monthly",
                             style: TextStyle(
-                              color: _choosenColor(idxButton: 2, isText: true),
+                              color: _choosenColor(_retroColor, idxButton: 2, isText: true),
                               fontSize: _heightText,
                             )),
                       ))),
@@ -91,7 +91,7 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
     );
   }
 
-  Color _choosenColor({required int idxButton, bool isText = false}) {
+  Color _choosenColor(Color _retroColor, {required int idxButton, bool isText = false}) {
     return isText
         ? _isSelected[idxButton]
             ? _retroColor
@@ -106,7 +106,7 @@ class _ButtonRowBarState extends State<ButtonRowBar> {
       TextSleep.positionButtonBar >= 0 ? _isSelected[TextSleep.positionButtonBar] = false : null;
       _isSelected[nextSelect] = true;
       TextSleep.positionButtonBar = nextSelect;
-       widget.notifyParent();
+      widget.notifyParent();
     });
   }
 }

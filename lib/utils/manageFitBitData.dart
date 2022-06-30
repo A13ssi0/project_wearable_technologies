@@ -100,7 +100,7 @@ Future<List<FitbitActivityTimeseriesData>> fetchCaloriesToday() async {
     resource: fitbitActivityTimeseriesDataManager.type,
   );
   final List<FitbitActivityTimeseriesData> data =
-    await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
+      await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
   return data;
 }
 
@@ -114,7 +114,7 @@ Future<List<FitbitActivityTimeseriesData>> fetchStepsToday() async {
     resource: fitbitActivityTimeseriesDataManager.type,
   );
   final List<FitbitActivityTimeseriesData> data =
-    await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
+      await fitbitActivityTimeseriesDataManager.fetch(fitbitActivityTimeseriesApiUrl) as List<FitbitActivityTimeseriesData>;
   return data;
 }
 

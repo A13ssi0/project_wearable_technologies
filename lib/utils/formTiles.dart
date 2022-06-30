@@ -63,7 +63,7 @@ class FormNumberTile extends ListTile {
                 String? ret;
                 String pattern = r'^(0*[1-9][0-9]*(\.[0-9]*)?|0*\.[0-9]*[1-9][0-9]*)$';
                 RegExp regex = RegExp(pattern);
-                if(!regex.hasMatch(value!)) {
+                if (!regex.hasMatch(value!)) {
                   ret = 'Must be a number.';
                 }
                 return ret;
@@ -90,12 +90,7 @@ class DropdownButtonTileNumber extends ListTile {
   final icon;
   final onChanged;
 
-  const DropdownButtonTileNumber(
-      {this.icon,
-      this.value,
-      this.items,
-      this.labelText,
-      this.onChanged});
+  const DropdownButtonTileNumber({this.icon, this.value, this.items, this.labelText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +104,11 @@ class DropdownButtonTileNumber extends ListTile {
           value: value,
           onChanged: onChanged,
           items: items.map<DropdownMenuItem<int>>((int value) {
-                      return DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(value.toString()),
-                      );
-                    })
-                    .toList(),
+            return DropdownMenuItem<int>(
+              value: value,
+              child: Text(value.toString()),
+            );
+          }).toList(),
         ),
       ),
     );
@@ -131,12 +125,7 @@ class DropdownButtonTileString extends ListTile {
   final icon;
   final onChanged;
 
-  const DropdownButtonTileString(
-      {this.icon,
-      this.value,
-      this.items,
-      this.labelText,
-      this.onChanged});
+  const DropdownButtonTileString({this.icon, this.value, this.items, this.labelText, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -150,12 +139,11 @@ class DropdownButtonTileString extends ListTile {
           value: value,
           onChanged: onChanged,
           items: items.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    })
-                    .toList(),
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
       ),
     );

@@ -18,9 +18,14 @@ Widget plotSleep(BuildContext context) {
               TimeSeriesSleep.yesterday = cleanedSleepData;
               return chartSleep(context);
             } else {
-              return const SizedBox(
-                height: 60.0,
-                child: Center(child: CircularProgressIndicator()),
+              return const Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage(
+                    'assets/jigglypuff.gif',
+                  ),
+                  radius: 100,
+                ),
+                // ),
               );
             }
           });
@@ -28,19 +33,17 @@ Widget plotSleep(BuildContext context) {
 
 Widget chartSleep(BuildContext context) {
   bool isSleepPage = false;
-  TooltipBehavior _tooltipBehavior =  TooltipBehavior(enable: false);
-  DateTime yesterday = DateTime.now().subtract(const Duration(days:1));
+  TooltipBehavior _tooltipBehavior = TooltipBehavior(enable: false);
+  DateTime yesterday = DateTime.now().subtract(const Duration(days: 1));
   String dayMonth = DateFormat('dd MMMM y').format(yesterday);
-
 
   Navigator.popUntil(context, (route) {
     if (route.settings.name == Sleeppage.routename) {
       isSleepPage = true;
-      _tooltipBehavior =  TooltipBehavior(enable: true);
-    }
-    else{
+      _tooltipBehavior = TooltipBehavior(enable: true);
+    } else {
       isSleepPage = false;
-      _tooltipBehavior =  TooltipBehavior(enable: false);
+      _tooltipBehavior = TooltipBehavior(enable: false);
     }
     return true;
   });
@@ -51,7 +54,7 @@ Widget chartSleep(BuildContext context) {
         Navigator.pushNamed(context, Sleeppage.routename);
       }
     },
-    title: ChartTitle(text: 'Sleep Levels of '+dayMonth+' nigth'),
+    title: ChartTitle(text: 'Sleep Levels of ' + dayMonth + ' nigth'),
     tooltipBehavior: _tooltipBehavior,
     primaryXAxis: DateTimeAxis(
       dateFormat: DateFormat('Hm'),
@@ -75,7 +78,7 @@ Widget chartSleep(BuildContext context) {
     ),
     series: <ChartSeries>[
       StepLineSeries<SleepPoint, DateTime>(
-        enableTooltip: isSleepPage, 
+        enableTooltip: isSleepPage,
         dataSource: TimeSeriesSleep.yesterday,
         xValueMapper: (SleepPoint data, _) => data.time,
         yValueMapper: (SleepPoint data, _) => data.level,

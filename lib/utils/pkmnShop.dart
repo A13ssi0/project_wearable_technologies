@@ -90,7 +90,7 @@ void dispError(BuildContext context) {
       context: context,
       builder: (builderContext) {
         return const AlertDialog(
-          content: Text('Not enougth money to buy it'),
+          content: Text('You don\'t have enougth money to buy it'),
         );
       }).then((val) {
     if (_timer.isActive) {
