@@ -3,7 +3,6 @@ import 'package:project_wearable_technologies/database/entities/pkmnDb.dart';
 
 @dao
 abstract class PkmnDao {
-
   @Query('SELECT * FROM PkmnDb')
   Future<List<PkmnDb>?> findAllPkmn();
 
@@ -16,7 +15,7 @@ abstract class PkmnDao {
   @insert
   Future<void> addPkmn(PkmnDb pkmn);
 
-  @Update(onConflict:OnConflictStrategy.replace)
+  @Update(onConflict: OnConflictStrategy.replace)
   Future<void> updatePkmn(PkmnDb pkmn);
 
   @delete
@@ -28,6 +27,6 @@ abstract class PkmnDao {
   @Query('DELETE FROM PkmnDb')
   Future<void> removeAllPkmn();
 
-  @Update(onConflict:OnConflictStrategy.replace)
+  @Update(onConflict: OnConflictStrategy.replace)
   Future<void> removePkmnFromShop(PkmnDb pkmn);
 }

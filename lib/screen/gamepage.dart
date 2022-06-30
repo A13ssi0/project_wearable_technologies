@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
-//import 'package:project_wearable_technologies/classes/pkmn.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 

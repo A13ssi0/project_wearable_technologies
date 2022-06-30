@@ -17,8 +17,8 @@ class DatabaseRepository extends ChangeNotifier {
   Future<void> addPkmn(PkmnDb pkmn) async {
     pkmn.isShop = false;
     List<PkmnDb>? dayCare = await database.pkmnDao.findPkmnDayCare();
-    dayCare ??= []; 
-    pkmn.entry =  dayCare.where((e) => e.id == pkmn.id).length;
+    dayCare ??= [];
+    pkmn.entry = dayCare.where((e) => e.id == pkmn.id).length;
     await database.pkmnDao.addPkmn(pkmn);
     notifyListeners();
   }
@@ -45,7 +45,7 @@ class DatabaseRepository extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updatePkmn(PkmnDb pkmn) async{
+  Future<void> updatePkmn(PkmnDb pkmn) async {
     await database.pkmnDao.updatePkmn(pkmn);
     notifyListeners();
   }
@@ -55,7 +55,7 @@ class DatabaseRepository extends ChangeNotifier {
     return pkmn;
   }
 
-  Future<void> removeListPkmn(List<PkmnDb> pkmn)async{
+  Future<void> removeListPkmn(List<PkmnDb> pkmn) async {
     await database.pkmnDao.removeListPkmn(pkmn);
   }
 
@@ -84,5 +84,4 @@ class DatabaseRepository extends ChangeNotifier {
     await database.activityDao.clearActivity();
     notifyListeners();
   }
-
-}//DatabaseRepository
+}

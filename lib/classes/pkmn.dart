@@ -58,17 +58,29 @@ class Pkmn {
     return _type;
   }
 
-  static Evolution? _addEvolution(Map<String, dynamic> jsonEvol, String name) {
+  static Evolution? _addEvolution(Map<String, dynamic> jsonEvol, String name, [int lvlAct = 1]) {
     if (jsonEvol['evolves_to'].length == 0) {
       return null;
-    } else if (jsonEvol['evolves_to'][0]['species']['name'] != name) {
-      String nameEv = jsonEvol['evolves_to'][0]['species']['name'];
-      int lvl = jsonEvol['evolves_to'][0]['evolution_details'][0]['min_level'];
-      return Evolution(name: nameEv, levelToEvolve: lvl);
-    } else {
-      Map<String, dynamic> newJsonEvol = jsonEvol['evolves_to'][0];
-      return _addEvolution(newJsonEvol, name);
     }
+    Map<String, dynamic> jsonEvol1 = jsonEvol['evolves_to'][0];
+    Map<String, dynamic>? jsonEvol2;
+    if (jsonEvol1['evolves_to'].length > 0) {
+      jsonEvol2 = jsonEvol1['evolves_to'][0];
+    }
+    int lvl;
+    if (jsonEvol['species']['name'] == name) {
+      String nameEv = jsonEvol1['species']['name'];
+      jsonEvol1['evolution_details'][0]['min_level'] != null ? lvl = jsonEvol1['evolution_details'][0]['min_level'] : lvl = 21;
+      return Evolution(name: nameEv, levelToEvolve: lvl);
+    } else if (jsonEvol1['species']['name'] == name && jsonEvol2 != null) {
+      String nameEv = jsonEvol2['species']['name'];
+      jsonEvol2['evolution_details'][0]['min_level'] != null
+          ? lvl = jsonEvol2['evolution_details'][0]['min_level']
+          : jsonEvol1['evolution_details'][0]['min_level'] != null
+              ? lvl = jsonEvol1['evolution_details'][0]['min_level'] * 2
+              : lvl = 21 * 2;
+      return Evolution(name: nameEv, levelToEvolve: lvl);
+    }
+    return null;
   }
 }
-

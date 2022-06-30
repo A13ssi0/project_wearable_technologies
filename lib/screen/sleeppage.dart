@@ -30,7 +30,10 @@ class _SleeppageState extends State<Sleeppage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               title(),
-              plotSleep(context),
+              SizedBox(
+                child: plotSleep(context),
+                height: 300,
+              ),
               const SizedBox(
                 height: 23,
               ),
@@ -58,7 +61,7 @@ class _SleeppageState extends State<Sleeppage> {
           height: 25,
         ),
         Row(
-          children:  [
+          children: [
             const SizedBox(
               width: 30,
             ),

@@ -1,8 +1,7 @@
 import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:project_wearable_technologies/screen/heartpage.dart';
-import 'package:project_wearable_technologies/utils/palette.dart';
+import 'package:project_wearable_technologies/screen/caloriespage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +17,6 @@ class DevPage extends StatelessWidget {
   static const route = '/';
   static const routename = 'dev';
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,56 +25,35 @@ class DevPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          ElevatedButton(onPressed: (){
-            showDialog<String>(
-                context: context,
-                builder: (BuildContext)=>AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: const Text('All the data will be delete.Are you sure ?'),
-                    actions:<Widget> [
-                      TextButton(
-                        onPressed: ()  async {
-                          final prefs = await SharedPreferences.getInstance();
-                          prefs.remove('user');
-                          await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn();
-                          await Provider.of<DatabaseRepository>(context, listen: false).clearActivity();
-                         await FitbitConnector.unauthorize(
-                        clientID: Strings.fitbitClientID,
-                      clientSecret: Strings.fitbitClientSecret,
-                      ).then((value) => {
-                           Navigator.of(context)
-                               .popUntil(ModalRoute.withName(Loginpage.routename))
-                         });
-
-                       },
-                        child: const Text('Yes'),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pushNamed(HeartPage.routename),
-                        child: const Text('No'),
-                      ),
-                    ],
-                ));
-          },
+          ElevatedButton(
+              onPressed: () {
+                showDialog<String>(
+                    context: context,
+                    builder: (buildContext) => AlertDialog(
+                          backgroundColor: Colors.white,
+                          title: const Text('All the data will be delete.Are you sure ?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () async {
+                                final prefs = await SharedPreferences.getInstance();
+                                prefs.remove('user');
+                                await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn();
+                                await Provider.of<DatabaseRepository>(context, listen: false).clearActivity();
+                                await FitbitConnector.unauthorize(
+                                  clientID: Strings.fitbitClientID,
+                                  clientSecret: Strings.fitbitClientSecret,
+                                ).then((value) => {Navigator.of(context).popUntil(ModalRoute.withName(Loginpage.routename))});
+                              },
+                              child: const Text('Yes'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pushNamed(HeartPage.routename),
+                              child: const Text('No'),
+                            ),
+                          ],
+                        ));
+              },
               child: const Text('LogOut')),
-
-          //ElevatedButton(
-            //onPressed: () async {
-             // await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn();
-             // await Provider.of<DatabaseRepository>(context, listen: false).clearActivity();
-             // await FitbitConnector.unauthorize(
-               // clientID: Strings.fitbitClientID,
-               // clientSecret: Strings.fitbitClientSecret,
-              //);
-              
-            //},
-            //child: const Text('Logout'),
-
-
-
-          //),
-
-
           ElevatedButton(
               onPressed: () async => await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn(), child: const Text('delete pkmn')),
           ElevatedButton(
@@ -100,20 +77,8 @@ class DevPage extends StatelessWidget {
                 Clock().updateDayCare(context, idxLastUpdate, update);
               },
               child: const Text('Add 1000 steps'))
-          
         ],
       ),
-
     );
-
-
-
-
-
   }
-
-
-
-
-  //build
-} //Page
+}

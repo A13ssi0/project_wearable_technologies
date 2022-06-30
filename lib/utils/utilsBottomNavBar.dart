@@ -1,13 +1,18 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:fitbitter/fitbitter.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:project_wearable_technologies/screen/gamepage.dart';
-import 'package:project_wearable_technologies/screen/heartpage.dart';
+import 'package:project_wearable_technologies/screen/caloriespage.dart';
 import 'package:project_wearable_technologies/screen/homepage.dart';
 import 'package:project_wearable_technologies/screen/sleeppage.dart';
 import 'package:project_wearable_technologies/utils/palette.dart';
+import 'package:project_wearable_technologies/utils/strings.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../screen/dev.dart';
+import '../repository/databaseRepository.dart';
+import '../screen/loginpage.dart';
 
 List<BottomNavyBarItem> listBottomNavyBarItem = [
   BottomNavyBarItem(
@@ -27,8 +32,55 @@ void changePage(BuildContext context, idx) {
     HeartPage.routename,
     Sleeppage.routename,
     Gamepage.routename,
-    DevPage.routename,
   ];
 
-  Navigator.pushNamed(context, listNamePages[idx]);
+  if (idx == 4) {
+    logOut(context);
+  } else {
+    Navigator.pushNamed(context, listNamePages[idx]);
+  }
+}
+
+void logOut(BuildContext context) {
+  showDialog<String>(
+      context: context,
+      builder: (buildContext) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: Column(
+              children: const [
+                Text(
+                  'All the data will be deleted',
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  'Are you sure?',
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.remove('user');
+                      await Provider.of<DatabaseRepository>(context, listen: false).removeAllPkmn();
+                      await Provider.of<DatabaseRepository>(context, listen: false).clearActivity();
+                      await FitbitConnector.unauthorize(
+                        clientID: Strings.fitbitClientID,
+                        clientSecret: Strings.fitbitClientSecret,
+                      ).then((value) => {Navigator.of(context).popUntil(ModalRoute.withName(Loginpage.routename))});
+                    },
+                    child: const Text('Yes'),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('No'),
+                  ),
+                ],
+              )
+            ],
+          ));
 }
